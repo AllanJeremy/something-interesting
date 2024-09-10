@@ -1,18 +1,46 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.toml`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Hono } from 'hono';
 
-export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
-	},
-} satisfies ExportedHandler<Env>;
+export type Env = {
+	DATABASE_URL: string;
+};
+
+const app = new Hono<{ Bindings: Env }>();
+
+//#region Users
+// Create a new user.
+app.post('/users', async (c) => {
+	return c.json({ message: 'User created' });
+});
+
+// Retrieve a list of all users.
+app.get('/users', async (c) => {
+	return c.json({ message: 'listing all users' });
+});
+
+//#endregion Users
+
+//#region Friends
+
+// Add a friend to a user’s friend list.
+app.post('/users/:id/friends', async (c) => {
+	return c.json({ message: 'adding a friend to a user’s friend list' });
+});
+
+// Confirm a friend request
+app.patch('/users/:id/friends/:friendId', async (c) => {
+	return c.json({ message: 'confirming a friend request' });
+});
+
+// Remove a friend from a user’s friend list.
+app.delete('/users/:id/friends/:friendId', async (c) => {
+	return c.json({ message: 'removing a friend from a user’s friend list' });
+});
+
+// Retrieve a list of all friends for a given user.
+app.get('/users/:id/friends', async (c) => {
+	return c.json({ message: 'retrieving a list of all friends for a given user' });
+});
+
+//#endregion Friends
+
+export default app;
