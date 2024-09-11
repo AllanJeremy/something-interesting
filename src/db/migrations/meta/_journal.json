@@ -8,6 +8,27 @@
       "when": 1726039475594,
       "tag": "0000_steady_exodus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1726052789511,
+      "tag": "0001_parched_maximus",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1726053125833,
+      "tag": "0002_gray_exiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1726053193096,
+      "tag": "0003_first_forgotten_one",
+      "breakpoints": true
     }
   ]
 }

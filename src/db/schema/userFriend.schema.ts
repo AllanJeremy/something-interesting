@@ -1,4 +1,4 @@
-import { pgTable, uuid, boolean, timestamp, index } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, boolean, timestamp, index } from 'drizzle-orm/pg-core';
 import { users } from './user.schema';
 
 /**
@@ -21,6 +21,7 @@ export const userFriends = pgTable(
 		friendUserId: uuid('friend_user_id')
 			.notNull()
 			.references(() => users.id),
+		nickname: varchar('nickname', { length: 20 }),
 		isConfirmed: boolean('is_confirmed').notNull().default(false),
 		isBlocked: boolean('is_blocked').notNull().default(false),
 		createdAt: timestamp('created_at').notNull().defaultNow(),

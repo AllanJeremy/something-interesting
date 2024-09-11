@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "pending_friend_count_index" ON "users" USING btree ("pending_friend_count");
