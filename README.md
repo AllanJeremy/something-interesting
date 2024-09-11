@@ -102,11 +102,15 @@ Checkout the [cloudflare workers documentation](https://developers.cloudflare.co
 
 ---
 
-## Assumptions
+## Assumptions made
+
+With great power, comes some compromise, or whatever Uncle Ben from spiderman said.
 
 ![Cat Typing](memes/cat-typing.gif)
 
-Any assumptions you made during development.
+Anyway, here are some assumptions I made while creating these APIs:
+
+1. The database should be able to handle 10M users (BigBallerz currently has 2M users)
 
 ---
 
@@ -116,31 +120,32 @@ Any assumptions you made during development.
 
 Based on how we have structured the project, here are a few potential areas of improvement (in no particular order):
 
-- **Setup CI/CD deployments for the repo.**
+1. **Setup CI/CD deployments for the repo.**
 
-  - This will automate the deployment of new changes to Cloudflare workers, eliminating the need for manual effort.
+- This will automate the deployment of new changes to Cloudflare workers, eliminating the need for manual effort.
 
-- **Add authentication & authorization to API routes**
+2. **Add authentication & authorization to API routes**
 
-  - Control who has access to what endpoints
+- Control who has access to what endpoints
 
-- **Caching:** Further reduce the load on the database by potentially using an in-memory cache to access frequently accessed records
+3. **Caching:** Further reduce the load on the database by potentially using an in-memory cache to access frequently accessed records
 
-  - This would work particularly well when fetching user/friend information for popular creators, which would be lots of duplicate requests being made to fetch the same thing.
+- This would work particularly well when fetching user/friend information for popular creators, which would be lots of duplicate requests being made to fetch the same thing.
 
-- **Track friend request metrics** (sent, received, pending) on the home page.
+4. **Track friend request metrics** (sent, received, pending) on the home page.
 
-  - This can help us derive insight on what players tend to initiate social interactions (which can serve as a growth engine for what type of players to target when marketing / retargeting ads).
+- This can help us derive insight on what players tend to initiate social interactions (which can serve as a growth engine for what type of players to target when marketing / retargeting ads).
 
-- **Add typesafety to `.env` by using zod to validate whether or not our environment variables are correctly setup.**
+5. **Add typesafety to `.env` by using zod to validate whether or not our environment variables are correctly setup.**
 
-- **Rate limiting:** limit how many requests a user can make over a period of time eg. per minute (prevent spam & ddos)
+6. **Rate limiting:** limit how many requests a user can make over a period of time eg. per minute (prevent spam & ddos)
 
-- **Database backups & replication:** snapshots of the database that can be used incase one database instance goes down.
+7. **Database backups & replication:** snapshots of the database that can be used incase one database instance goes down.
 
-- **Add a contribution guide**
-  - This would reside in [CONTRIBUTION.md](CONTRIBUTION.md) and would contain
-    - Code style guides: so the codebase remains consistent
-    - Architectural decisions
-    - How to add/modify stuff
-    - Pull request process & rules etc.
+8. **Add a contribution guide**
+
+- This would reside in [CONTRIBUTION.md](CONTRIBUTION.md) and would contain
+  - Code style guides: so the codebase remains consistent
+  - Architectural decisions
+  - How to add/modify stuff
+  - Pull request process & rules etc.
