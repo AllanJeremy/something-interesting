@@ -16,11 +16,13 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      # - name: Install dependencies
-      #   run: bun install
+
+      - name: Install dependencies
+        run: bun install
+
       - name: Run tests
         run: bun run test
-      # TODO: Add tests to CI
+
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
