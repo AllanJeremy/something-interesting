@@ -2,13 +2,13 @@
 
 ### Tech Stack
 
-- [Hono](https://hono.dev){:target="\_blank"} - Web framework
-- [Cloudflare workers](https://workers.cloudflare.com/){:target="\_blank"} - Serverless hosting
-- [Typescript](https://www.typescriptlang.org/){:target="\_blank"}
-- [Neon](https://neon.tech/){:target="\_blank"} - Serverless [Postgres](https://www.postgresql.org/)
-- [Drizzle](https://orm.drizzle.team/){:target="\_blank"} - Database ORM
-- [ReactJS](https://react.dev/){:target="\_blank"} - Client side library
-- [Bun](https://bun.sh){:target="\_blank"} - A fast runtime, bundler and package manager
+- [Hono](https://hono.dev) - Web framework
+- [Cloudflare workers](https://workers.cloudflare.com/) - Serverless hosting
+- [Typescript](https://www.typescriptlang.org/)
+- [Neon](https://neon.tech/) - Serverless [Postgres](https://www.postgresql.org/)
+- [Drizzle](https://orm.drizzle.team/) - Database ORM
+- [ReactJS](https://react.dev/) - Client side library
+- [Bun](https://bun.sh) - A fast runtime, bundler and package manager
 
 ---
 
@@ -27,9 +27,9 @@ cd aj-doge-labs
 
 ## Installing dependencies
 
-For this project, we are using [bun](https://bun.sh/){:target="\_blank"} for running the project and managing dependencies.
+For this project, we are using [bun](https://bun.sh/) for running the project and managing dependencies.
 
-If you haven't already set it up on your machine, then please follow the instructions on the [bun website](https://bun.sh/){:target="\_blank"}.
+If you haven't already set it up on your machine, then please follow the instructions on the [bun website](https://bun.sh/).
 
 Once `bun` is setup, run the following command to install the project's dependencies:
 
@@ -74,7 +74,7 @@ To run the project locally, use the following command:
 bun dev
 ```
 
-The project should now be accessible via [http://localhost:8787](http://localhost:8787){:target="\_blank"}.
+The project should now be accessible via [http://localhost:8787](http://localhost:8787).
 
 ## Deploying to CloudFlare Workers
 
@@ -82,7 +82,7 @@ The live version of our APIs and application are deployed using cloudflare worke
 
 > Cloudflare workers contain a generous free tier and you won't need to pay for anything to setup, run or test out this project.
 
-If you don't already have a [cloudflare](https://cloudflare.com){:target="\_blank"} account, [create one](https://dash.cloudflare.com/login){:target="\_blank"}.
+If you don't already have a [cloudflare](https://cloudflare.com) account, [create one](https://dash.cloudflare.com/login).
 
 **First: authenticate to cloudflare**
 
