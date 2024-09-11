@@ -7,7 +7,7 @@ export type Env = {
 const app = new Hono<{ Bindings: Env }>();
 
 app.get('/', async (c) => {
-	return c.text('React app will go here');
+	return c.text('Updated: React app will go here');
 });
 
 //#region Users

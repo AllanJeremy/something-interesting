@@ -114,6 +114,12 @@ Anyway, here are some assumptions I made while creating these APIs:
 
 ---
 
+## Additional features
+
+1. CI/CD & automatic deploys through GitHub
+
+---
+
 ## Areas of Improvement
 
 ![SpongeBob and Patrick thinking deeply](memes/spongebob-and-patrick-thinking.gif)
