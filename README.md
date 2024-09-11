@@ -149,3 +149,8 @@ Based on how we have structured the project, here are a few potential areas of i
   - Architectural decisions
   - How to add/modify stuff
   - Pull request process & rules etc.
+
+9. Combine initial migrations into one migration file
+
+- Since I was iterating in dev, there were a few database changes that were made in the early stages.
+- In retrospect, I could have waited until I was done to generate the single migration needed to run when you setup the project. However, creating multiple migrations is also indicative of how real-world use occurs, so ><
