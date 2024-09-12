@@ -17,11 +17,14 @@ jobs:
         with:
           bun-version: latest
 
+      - name: List directory contents
+        run: ls -R
+
       - name: Install dependencies
         run: bun install
 
       - name: Run tests
-        run: bun run test
+        run: bun run test --config ./vitest.config.mts
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
