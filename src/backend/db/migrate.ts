@@ -11,7 +11,7 @@ const databaseUrl = drizzle(postgres(`${process.env.DATABASE_URL}`, { ssl: 'requ
 
 const main = async () => {
 	try {
-		await migrate(databaseUrl, { migrationsFolder: 'src/db/migrations' });
+		await migrate(databaseUrl, { migrationsFolder: 'src/backend/db/migrations' });
 		console.log('Migration complete');
 	} catch (error) {
 		console.log('Migration failed:', error);
