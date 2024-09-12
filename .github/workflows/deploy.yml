@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat/setup-user-service
 
 jobs:
   deploy:
@@ -23,8 +24,8 @@ jobs:
       - name: Run CI/CD
         run: bun run test
 
-      - name: Deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          packageManager: bun
+      # - name: Deploy
+      #   uses: cloudflare/wrangler-action@v3
+      #   with:
+      #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      #     packageManager: bun
