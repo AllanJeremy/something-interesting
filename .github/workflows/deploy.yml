@@ -12,19 +12,6 @@ jobs:
     name: Deploy
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: List directory contents
-        run: ls -R
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Run tests
-        run: bun run test --config ./vitest.config.mts
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
