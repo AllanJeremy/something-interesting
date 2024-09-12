@@ -1,5 +1,11 @@
 ## Introduction
 
+This project includes 3 things
+
+1. A ReactJS based homepage accessible via the root URL `/` with friend stats
+2. API endpoints for `users` and `friends` accessible via `/api/*`
+3. CI/CD & automatic deploys through GitHub
+
 ### Tech Stack
 
 - [Hono](https://hono.dev) - Web framework
@@ -120,9 +126,9 @@ Anyway, here are some assumptions I made while creating these APIs:
 
 Based on how we have structured the project, here are a few potential areas of improvement (in no particular order):
 
-1. **Setup CI/CD deployments for the repo.**
+1. **Setup tests om CI/CD deployments for the repo.**
 
-- This will automate the deployment of new changes to Cloudflare workers, eliminating the need for manual effort.
+- This would ensure that tests pass before deploying to production
 
 2. **Add authentication & authorization to API routes**
 
