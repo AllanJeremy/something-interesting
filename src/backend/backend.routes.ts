@@ -1,7 +1,11 @@
 //? In the event that we have more routes, we can
 import { Hono } from 'hono';
+
+// Routes
 import userRoutes from './routes/users.routes';
 import userFriendsRoutes from './routes/userFriends.routes';
+
+// Services
 import { UserService } from './services/user.service';
 
 export type Env = {
