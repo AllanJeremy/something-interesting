@@ -24,7 +24,7 @@ export const users = pgTable(
 
 		lastLoginAt: timestamp('last_login_at'),
 		createdAt: timestamp('created_at').notNull().defaultNow(),
-		updatedAt: timestamp('updated_at').notNull().defaultNow(),
+		updatedAt: timestamp('updated_at').notNull().defaultNow(), // TODO: Actually make this update when the user is updated
 	},
 	(table) => ({
 		// Set index for friend count for efficient sorting/filtering by friend count

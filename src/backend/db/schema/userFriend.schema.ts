@@ -26,7 +26,7 @@ export const userFriends = pgTable(
 		isConfirmed: boolean('is_confirmed').notNull().default(false),
 		isBlocked: boolean('is_blocked').notNull().default(false),
 		createdAt: timestamp('created_at').notNull().defaultNow(),
-		updatedAt: timestamp('updated_at').notNull().defaultNow(),
+		updatedAt: timestamp('updated_at').notNull().defaultNow(), // TODO: Actually make this update when the friend is updated
 	},
 	(table) => ({
 		// Set index for userId and friendUserId for faster friend lookups
