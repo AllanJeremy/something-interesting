@@ -1,6 +1,6 @@
-import { ApiResponse } from '../types';
+import { ApiErrorResponse, ApiSuccessResponse } from '../types';
 
-export function generateApiErrorResponse<T>(error: Record<string, unknown> | string, message?: string): ApiResponse<T> {
+export function generateApiErrorResponse<E = unknown>(error: E, message?: string): ApiErrorResponse<E> {
 	return {
 		ok: false,
 		message: message ?? 'An error occurred',
@@ -8,7 +8,7 @@ export function generateApiErrorResponse<T>(error: Record<string, unknown> | str
 	};
 }
 
-export function generateApiSuccessResponse<T>(data: T, message?: string): ApiResponse<T> {
+export function generateApiSuccessResponse<T>(data: T, message?: string): ApiSuccessResponse<T> {
 	return {
 		ok: true,
 		data,

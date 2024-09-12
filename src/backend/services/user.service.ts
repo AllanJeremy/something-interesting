@@ -1,5 +1,7 @@
 import { users, userFriends, userFriendsRelations } from '../db/schema';
 import { createDb } from '../db';
+import { CreateUserData, User } from '../types';
+
 export class UserService {
 	//#region Constants
 	//* These values never change from instance to instance - so we make them static
@@ -30,23 +32,22 @@ export class UserService {
 	}
 
 	//#region Users
-	public async createUser(userData: { username: string; email: string }) {
-		console.log('db: ', this.db);
+	public async createUser(createUserData: CreateUserData): Promise<User> {
+		const createdUser = await this.db
+			.insert(users)
+			.values({
+				username: createUserData.username,
+				email: createUserData.email,
+			})
+			.returning();
 
-		this.db.insert(users).values({
-			username: userData.username,
-			email: userData.email,
-		});
-
-		return {
-			id: '123',
-			username: 'John Doe',
-			email: 'john.doe@example.com',
-		};
+		return createdUser[0];
 	}
 
-	public async getAllUsers(searchQuery?: string, limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0) {
-		//
+	public async getAllUsers(searchQuery?: string, limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0): Promise<User[]> {
+		const usersFound = await this.db.select().from(users).limit(limit).offset(offset);
+
+		return usersFound;
 	}
 	//#endregion Users
 
