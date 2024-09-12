@@ -1,13 +1,13 @@
 import { Hono } from 'hono';
-import { UserService } from '../services/user.service';
+import { Env, Vars } from '../backend.routes';
 
-const app = new Hono<{ Bindings: Env }>();
-
-const userService = new UserService();
+const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
 //#region Users
 // Create a new user.
 app.post('/', async (c) => {
+	const userService = c.get('userService');
+
 	const userCreated = await userService.createUser({
 		username: 'Allan',
 		email: 'aj.dev254@gmail.com',
@@ -20,6 +20,8 @@ app.post('/', async (c) => {
 
 // Retrieve a list of all users.
 app.get('/', async (c) => {
+	const userService = c.get('userService');
+
 	return c.json({ message: 'listing all users' });
 });
 

@@ -1,5 +1,5 @@
-import { users, userFriends } from '../db/schema';
-
+import { users, userFriends, userFriendsRelations } from '../db/schema';
+import { createDb } from '../db';
 export class UserService {
 	//#region Constants
 	//* These values never change from instance to instance - so we make them static
@@ -12,6 +12,15 @@ export class UserService {
 
 	//#endregion Constants
 
+	//#region Constructor
+	// TODO: Consider making this a singleton when we have more services
+	private db: ReturnType<typeof createDb>;
+
+	constructor(private databaseUrl: string) {
+		this.db = createDb(databaseUrl);
+	}
+	//#endregion Constructor
+
 	/** A performant way to check if a user with a specific id exists
 	 * @param userId The id of the user to check for existence
 	 */
@@ -21,9 +30,22 @@ export class UserService {
 	}
 
 	//#region Users
-	public async createUser(userData: any) {}
+	public async createUser(userData: { username: string; email: string }) {
+		console.log('db: ', this.db);
 
-	public async getAllUsers(searchQuery?: string, limit = UserService.DEFAULT_USERS_PER_PAGE, page = 1) {
+		this.db.insert(users).values({
+			username: userData.username,
+			email: userData.email,
+		});
+
+		return {
+			id: '123',
+			username: 'John Doe',
+			email: 'john.doe@example.com',
+		};
+	}
+
+	public async getAllUsers(searchQuery?: string, limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0) {
 		//
 	}
 	//#endregion Users
@@ -41,7 +63,7 @@ export class UserService {
 		//
 	}
 
-	public async getUserFriendList(userId: string, limit = UserService.DEFAULT_FRIENDS_PER_PAGE, page = 1) {
+	public async getUserFriendList(userId: string, limit = UserService.DEFAULT_FRIENDS_PER_PAGE, offset = 0) {
 		//
 	}
 
