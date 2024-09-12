@@ -3,7 +3,7 @@
 This project includes 3 things
 
 1. A ReactJS based homepage accessible via the root URL `/` with friend stats
-2. API endpoints for `users` and `friends` accessible via `/api/*`
+2. Standardized API endpoints for `users` and `friends` accessible via `/api/*`
 3. CI/CD & automatic testing & deploys through GitHub
 
 ### Tech Stack
