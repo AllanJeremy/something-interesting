@@ -1,7 +1,7 @@
 import { users, userFriends, userFriendsRelations } from '../db/schema';
 import { createDb } from '../db';
 import { CreateUserData, User } from '../types';
-
+import { desc } from 'drizzle-orm';
 export class UserService {
 	//#region Constants
 	//* These values never change from instance to instance - so we make them static
@@ -45,7 +45,7 @@ export class UserService {
 	}
 
 	public async getAllUsers(searchQuery?: string, limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0): Promise<User[]> {
-		const usersFound = await this.db.select().from(users).limit(limit).offset(offset);
+		const usersFound = await this.db.select().from(users).limit(limit).offset(offset).orderBy(desc(users.updatedAt));
 
 		return usersFound;
 	}
