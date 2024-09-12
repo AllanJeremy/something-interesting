@@ -156,3 +156,5 @@ Based on how we have structured the project, here are a few potential areas of i
 
 - Since I was iterating in dev, there were a few database changes that were made in the early stages.
 - In retrospect, I could have waited until I was done to generate the single migration needed to run when you setup the project. However, creating multiple migrations is also indicative of how real-world use occurs, so ><
+
+9. Add friendlier error message responses from db instead of forwarding db error as response (for example: when creating duplicate records)
