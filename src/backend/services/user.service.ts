@@ -44,7 +44,9 @@ export class UserService {
 		return createdUser[0];
 	}
 
-	public async getAllUsers(searchQuery?: string, limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0): Promise<User[]> {
+	//? Consider adding a search query param to this endpoint in future
+	public async getAllUsers(limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0): Promise<User[]> {
+		//? We could optimize this by fetching less columns here
 		const usersFound = await this.db.select().from(users).limit(limit).offset(offset).orderBy(desc(users.updatedAt));
 
 		return usersFound;
