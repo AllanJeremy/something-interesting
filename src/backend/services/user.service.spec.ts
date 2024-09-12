@@ -120,6 +120,10 @@ describe('UserService', () => {
 			});
 
 			describe('Invalid inputs', () => {
+				it('should fail if user tries to add themself as a friend', () => {
+					// TODO: Implement test
+				});
+
 				it('should fail if user ID is invalid', async () => {
 					// TODO: Implement test
 				});

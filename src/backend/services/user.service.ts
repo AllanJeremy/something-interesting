@@ -55,19 +55,38 @@ export class UserService {
 
 	//#region Friends
 	public async addFriend(userId: string, friendUserId: string) {
-		//
+		if (userId === friendUserId) {
+			throw new Error('You cannot add yourself as a friend');
+		}
+
+		const userExists = await this._userExists(userId);
+		const friendUserExists = await this._userExists(friendUserId);
+
+		// Both users must exist for the friend request to be sent
+		if (!userExists || !friendUserExists) {
+			throw new Error('User or friend user does not exist');
+		}
+
+		// TODO: Check if users are already friends or there is an existing pending request
+
+		// TODO: Send a friend request
 	}
 
 	public async confirmFriendRequest(userId: string, friendUserId: string) {
-		//
+		// TODO: Check if the friend request is valid
+		//TODO: Check if users are already friends
+		//TODO: Check if there is an existing pending request
+		// TODO: Confirm the friend request
 	}
 
 	public async removeFriend(userId: string, friendUserId: string) {
-		//
+		// TODO: Check if the friend request is valid
+		// TODO: Remove the friend request
 	}
 
 	public async getUserFriendList(userId: string, limit = UserService.DEFAULT_FRIENDS_PER_PAGE, offset = 0) {
-		//
+		// TODO: Check if the user exists
+		// TODO: Fetch the friend list
 	}
 
 	//#endregion Friends
