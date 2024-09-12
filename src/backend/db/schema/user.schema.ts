@@ -14,7 +14,7 @@ export const userRoleEnum = pgEnum('role', ['admin', 'user']);
 export const users = pgTable(
 	'users',
 	{
-		id: uuid('id').primaryKey(),
+		id: uuid('id').primaryKey().defaultRandom(),
 		username: varchar('username', { length: 16 }).notNull().unique(), // Max username length 16 chars
 		email: varchar('email', { length: 320 }).notNull().unique(), // Max length of an email according to RFC 3696 is 320
 		friendCount: integer('friend_count').notNull().default(0),

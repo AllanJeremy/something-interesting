@@ -1,5 +1,6 @@
 import { pgTable, uuid, varchar, boolean, timestamp, index } from 'drizzle-orm/pg-core';
 import { users } from './user.schema';
+import { relations } from 'drizzle-orm';
 
 /**
  * Represents the friendship relationship between users in the system.
@@ -14,7 +15,7 @@ import { users } from './user.schema';
 export const userFriends = pgTable(
 	'user_friends',
 	{
-		id: uuid('id').primaryKey(),
+		id: uuid('id').primaryKey().defaultRandom(),
 		userId: uuid('user_id')
 			.notNull()
 			.references(() => users.id),
@@ -33,3 +34,14 @@ export const userFriends = pgTable(
 		friendUserIdIndex: index('friend_user_id_index').on(table.friendUserId),
 	})
 );
+
+export const userFriendsRelations = relations(userFriends, ({ one }) => ({
+	user: one(users, {
+		fields: [userFriends.userId],
+		references: [users.id],
+	}),
+	friend: one(users, {
+		fields: [userFriends.friendUserId],
+		references: [users.id],
+	}),
+}));

@@ -5,7 +5,7 @@ import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 
 // Load environment variables into the file
-config();
+config({ path: '.dev.vars' });
 
 const databaseUrl = drizzle(postgres(`${process.env.DATABASE_URL}`, { ssl: 'require', max: 1 }));
 

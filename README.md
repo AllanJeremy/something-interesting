@@ -49,10 +49,10 @@ For us to be able to connect to our database, we need to provide a valid [Neon/P
 
 ### Configuring environment variables
 
-- Copy the `.env.example` file in the root directory and rename it to `.env`
+- Copy the `.dev.vars.example` file in the root directory and rename it to `.dev.vars`
 - Replace the values of the environment variables with
 
-> Tip: The .env file also contains tips on what values are expected for each environment variable
+> Tip: The file also contains tips on what values are expected for each environment variable
 
 ### Running database migrations
 
