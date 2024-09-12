@@ -12,6 +12,7 @@ export type Vars = { userService: UserService };
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
+// If we had more services, we could only inject the services that are needed for that route
 app.use('*', async (c, next) => {
 	// Configure the UserService for all backend routes with the database url
 	const userService = new UserService(c.env.DATABASE_URL);
