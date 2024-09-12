@@ -21,9 +21,7 @@ export class UserService {
 	}
 
 	//#region Users
-	public async createUser() {
-		//
-	}
+	public async createUser(userData: any) {}
 
 	public async getAllUsers(searchQuery?: string, limit = UserService.DEFAULT_USERS_PER_PAGE, page = 1) {
 		//
