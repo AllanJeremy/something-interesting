@@ -12,11 +12,11 @@ export type Env = {
 	DATABASE_URL: string;
 };
 
-export type Vars = { userService: UserService };
+export type Vars = { userService: UserService; userId?: string };
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
-// If we had more services, we could only inject the services that are needed for that route
+//? If we had more services, we could only inject the services that are needed for that route
 app.use('*', async (c, next) => {
 	// Configure the UserService for all backend routes with the database url
 	const userService = new UserService(c.env.DATABASE_URL);
@@ -24,11 +24,21 @@ app.use('*', async (c, next) => {
 	//? (Dependency Injection) Inject the userService in the context so we don't have to create a new instance on every request
 	c.set('userService', userService);
 
-	console.log('db url [bruh]: ', c.env.DATABASE_URL);
+	await next();
+});
+
+// Set userId for users/:userId routes
+app.use('/users/:userId/*', async (c, next) => {
+	const userId = c.req.param('userId');
+	if (!userId) {
+		return c.json({ error: 'User ID is required' }, 400);
+	}
+	c.set('userId', userId);
 	await next();
 });
 
 app.route('/users', userRoutes);
-app.route('/users/:id/friends', userFriendsRoutes);
+
+app.route('/users/:userId/friends', userFriendsRoutes);
 
 export default app;
