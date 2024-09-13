@@ -24,7 +24,7 @@ export class FriendService {
 	 * @description We only return the id because that's all we need
 	 * @param userId The id of the user to check for friendship
 	 * @param friendUserId The id of the friend to check for
-	 * @returns The user friendship if it exists, `null` otherwise
+	 * @returns {Promise<UserFriendship | null>} A promise that resolves to the user friendship if it exists, `null` otherwise
 	 */
 	private async _getUserFriendship(
 		userId: string,
@@ -53,7 +53,7 @@ export class FriendService {
 	 * Checks if two users are friends or have a pending friend request
 	 * @param userId The id of the user to check for friendship
 	 * @param friendUserId The id of the friend to check for
-	 * @returns `true` if the users are friends or have a pending request, `false` otherwise
+	 * @returns {Promise<boolean>} A promise that resolves to `true` if the users are friends or have a pending request, `false` otherwise
 	 */
 	private async _areFriendsOrHavePendingRequest(userId: string, friendUserId: string): Promise<boolean> {
 		const userFriendship = await this._getUserFriendship(userId, friendUserId);
@@ -64,7 +64,7 @@ export class FriendService {
 	 * Checks if both users exist
 	 * @param userId The id of the user to check for existence
 	 * @param friendUserId The user id of the friend to check for existence
-	 * @returns `true` if both users exist, `false` otherwise
+	 * @returns {Promise<boolean>} `true` if both users exist, `false` otherwise
 	 */
 	private async _bothUserAndFriendExist(userId: string, friendUserId: string): Promise<boolean> {
 		const userExists = await this.userService.userExists(userId);
@@ -77,7 +77,7 @@ export class FriendService {
 	 * Adds a friend request between two users
 	 * @param userId The id of the user initiating the friend request
 	 * @param friendUserId The id of the user receiving the friend request
-	 * @returns The friend request that was created
+	 * @returns {Promise<UserFriendship>} A promise that resolves to the friend request that was created
 	 */
 	public async addFriend(userId: string, friendUserId: string): Promise<UserFriendship> {
 		if (userId === friendUserId) {
@@ -118,7 +118,7 @@ export class FriendService {
 	 * Confirms a friend request between two users
 	 * @param userId The id of the user initiating the friend request
 	 * @param friendshipId The id of the friendship to be confirmed
-	 * @returns The friend request that was confirmed
+	 * @returns {Promise<UserFriendship>} A promise that resolves to the friend request that was confirmed
 	 */
 	public async confirmFriendRequest(userId: string, friendshipId: string): Promise<UserFriendship> {
 		const userExists = await this.userService.userExists(userId);
@@ -165,7 +165,7 @@ export class FriendService {
 	 * Removes a friend request between two users
 	 * @param userId The id of the user that initiated the friend request
 	 * @param friendshipId The id of the friendship to be removed
-	 * @returns The friend request that was removed
+	 * @returns {Promise<UserFriendship>} A promise that resolves to the friend request that was removed
 	 */
 	public async removeFriend(userId: string, friendshipId: string): Promise<UserFriendship> {
 		// Make sure that the friendship exists and that the user is the one that initiated the friendship
@@ -202,6 +202,14 @@ export class FriendService {
 		return deletedUserFriendship[0];
 	}
 
+	/**
+	 * Retrieves a list of user friendships for a given user
+	 * @description This function fetches all friendships where the user is either the initiator or the receiver
+	 * @param userId The id of the user to fetch friendships for
+	 * @param limit The maximum number of friendships to return (default: FriendService.DEFAULT_FRIENDS_PER_PAGE)
+	 * @param offset The number of friendships to skip (for pagination)
+	 * @returns {Promise<UserFriendship[]>} A promise that resolves to an array of UserFriendship objects
+	 */
 	public async getUserFriendList(userId: string, limit = FriendService.DEFAULT_FRIENDS_PER_PAGE, offset = 0): Promise<UserFriendship[]> {
 		// Get all friendships where the user is either the initiator or the receiver
 		const friendshipCondition = or(eq(userFriends.userId, userId), eq(userFriends.friendUserId, userId));
