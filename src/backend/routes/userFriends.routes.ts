@@ -1,13 +1,13 @@
 import { Hono } from 'hono';
 import { Env, Vars } from '../backend.routes';
 import { generateApiErrorResponse, generateApiSuccessResponse } from '../utils/api.utils';
-import { UserService } from '../services/user.service';
+import { FriendService } from '../services/friend.service';
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
-// Add a friend to a user’s friend list.
+// Add a friend to a user's friend list.
 app.post('/', async (c) => {
-	const userService = c.get('userService');
+	const friendService = c.get('friendService');
 	const userId = c.get('userId') as string;
 
 	const body = await c.req.json();
@@ -20,7 +20,7 @@ app.post('/', async (c) => {
 	}
 
 	try {
-		const createdFriendship = await userService.addFriend(userId, friendUserId);
+		const createdFriendship = await friendService.addFriend(userId, friendUserId);
 		const apiResponse = generateApiSuccessResponse(createdFriendship, 'Friend request sent successfully');
 
 		return c.json(apiResponse, 201);
@@ -35,15 +35,15 @@ app.post('/', async (c) => {
 
 // Retrieve a list of all friends for a given user.
 app.get('/', async (c) => {
-	const userService = c.get('userService');
+	const friendService = c.get('friendService');
 	const userId = c.get('userId') as string;
 
 	// Get query parameters with default values
-	const limit = parseInt(c.req.query('limit') || String(UserService.DEFAULT_FRIENDS_PER_PAGE));
+	const limit = parseInt(c.req.query('limit') || String(FriendService.DEFAULT_FRIENDS_PER_PAGE));
 	const offset = parseInt(c.req.query('offset') || '0');
 
 	try {
-		const friendList = await userService.getUserFriendList(userId, limit, offset);
+		const friendList = await friendService.getUserFriendList(userId, limit, offset);
 		const apiResponse = generateApiSuccessResponse(friendList, 'Friend list retrieved successfully');
 
 		return c.json(apiResponse);
@@ -57,7 +57,7 @@ app.get('/', async (c) => {
 
 // Confirm a friend request
 app.patch('/:friendshipId', async (c) => {
-	const userService = c.get('userService');
+	const friendService = c.get('friendService');
 	const userId = c.get('userId') as string;
 	const friendshipId = c.req.param('friendshipId');
 
@@ -68,7 +68,7 @@ app.patch('/:friendshipId', async (c) => {
 	}
 
 	try {
-		const confirmedFriendship = await userService.confirmFriendRequest(userId, friendshipId);
+		const confirmedFriendship = await friendService.confirmFriendRequest(userId, friendshipId);
 		const apiResponse = generateApiSuccessResponse(confirmedFriendship, 'Friend request confirmed successfully');
 
 		return c.json(apiResponse);
@@ -80,10 +80,10 @@ app.patch('/:friendshipId', async (c) => {
 	}
 });
 
-// Remove a friend from a user’s friend list.
+// Remove a friend from a user's friend list.
 app.delete('/:friendshipId', async (c) => {
 	// TODO: Add validation for the request body & params using Zod
-	const userService = c.get('userService');
+	const friendService = c.get('friendService');
 	const userId = c.get('userId') as string;
 	const friendshipId = c.req.param('friendshipId');
 
@@ -94,7 +94,7 @@ app.delete('/:friendshipId', async (c) => {
 	}
 
 	try {
-		const removedFriendship = await userService.removeFriend(userId, friendshipId);
+		const removedFriendship = await friendService.removeFriend(userId, friendshipId);
 		const apiResponse = generateApiSuccessResponse(removedFriendship, 'Friend removed successfully');
 
 		return c.json(apiResponse);
