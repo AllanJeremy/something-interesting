@@ -3,6 +3,7 @@ import { DatabaseConnection } from '../db';
 import { userFriends } from '../db/schema';
 import { CreateUserFriendData, UserFriendship } from '../types';
 import { UserService } from './user.service';
+import { calculateOffset } from '../utils/pagination.utils';
 
 export class FriendService {
 	//#region Constants
@@ -221,13 +222,14 @@ export class FriendService {
 	 * @description This function fetches all friendships where the user is either the initiator or the receiver
 	 * @param userId The id of the user to fetch friendships for
 	 * @param limit The maximum number of friendships to return (default: FriendService.DEFAULT_FRIENDS_PER_PAGE)
-	 * @param offset The number of friendships to skip (for pagination)
+	 * @param page The page number for pagination (starting at 1)
 	 * @returns {Promise<UserFriendship[]>} A promise that resolves to an array of UserFriendship objects
 	 */
-	public async getUserFriendList(userId: string, limit = FriendService.DEFAULT_FRIENDS_PER_PAGE, offset = 0): Promise<UserFriendship[]> {
+	public async getUserFriendList(userId: string, limit = FriendService.DEFAULT_FRIENDS_PER_PAGE, page = 1): Promise<UserFriendship[]> {
 		// Get all friendships where the user is either the initiator or the receiver
 		const friendshipCondition = or(eq(userFriends.userId, userId), eq(userFriends.friendUserId, userId));
 
+		const offset = calculateOffset(page, limit);
 		const userFriendships = await this.db.select().from(userFriends).where(friendshipCondition).limit(limit).offset(offset);
 
 		return userFriendships;

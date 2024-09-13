@@ -40,10 +40,10 @@ app.get('/', async (c) => {
 
 	// Get query parameters with default values
 	const limit = parseInt(c.req.query('limit') || String(FriendService.DEFAULT_FRIENDS_PER_PAGE));
-	const offset = parseInt(c.req.query('offset') || '0');
+	const page = parseInt(c.req.query('page') || '1');
 
 	try {
-		const friendList = await friendService.getUserFriendList(userId, limit, offset);
+		const friendList = await friendService.getUserFriendList(userId, limit, page);
 		const apiResponse = generateApiSuccessResponse(friendList, 'Friend list retrieved successfully');
 
 		return c.json(apiResponse);
