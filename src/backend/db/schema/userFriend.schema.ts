@@ -22,7 +22,6 @@ export const userFriends = pgTable(
 		friendUserId: uuid('friend_user_id')
 			.notNull()
 			.references(() => users.id),
-		nickname: varchar('nickname', { length: 20 }),
 		isConfirmed: boolean('is_confirmed').notNull().default(false),
 		isBlocked: boolean('is_blocked').notNull().default(false),
 		createdAt: timestamp('created_at').notNull().defaultNow(),
