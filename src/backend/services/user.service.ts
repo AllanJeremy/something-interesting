@@ -99,15 +99,14 @@ export class UserService {
 	}
 
 	/**
-	 * Checks if two users are friends
+	 * Checks if two users are friends or have a pending friend request
 	 * @param userId The id of the user to check for friendship
 	 * @param friendUserId The id of the friend to check for
-	 * @returns `true` if the users are friends, `false` otherwise
+	 * @returns `true` if the users are friends or have a pending request, `false` otherwise
 	 */
-	private async _usersAreFriends(userId: string, friendUserId: string): Promise<boolean> {
-		const userFriendshipId = await this._getUserFriendship(userId, friendUserId);
-
-		return userFriendshipId !== null;
+	private async _areFriendsOrHavePendingRequest(userId: string, friendUserId: string): Promise<boolean> {
+		const userFriendship = await this._getUserFriendship(userId, friendUserId);
+		return userFriendship !== null;
 	}
 
 	/**
@@ -141,7 +140,7 @@ export class UserService {
 			throw new Error('One or both users (initiator or receiver) do not exist');
 		}
 
-		const usersAreFriends = await this._usersAreFriends(userId, friendUserId);
+		const usersAreFriends = await this._areFriendsOrHavePendingRequest(userId, friendUserId);
 
 		if (usersAreFriends) {
 			throw new Error('Users are already friends or there is an existing pending request');
