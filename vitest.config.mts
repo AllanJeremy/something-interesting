@@ -7,6 +7,5 @@ export default defineWorkersConfig({
 				wrangler: { configPath: './wrangler.toml' },
 			},
 		},
-		environment: 'miniflare',
 	},
 });

@@ -14,7 +14,7 @@ export const userRoleEnum = pgEnum('role', ['admin', 'user']);
 export const users = pgTable(
 	'users',
 	{
-		id: uuid('id').primaryKey(),
+		id: uuid('id').primaryKey().defaultRandom(),
 		username: varchar('username', { length: 16 }).notNull().unique(), // Max username length 16 chars
 		email: varchar('email', { length: 320 }).notNull().unique(), // Max length of an email according to RFC 3696 is 320
 		friendCount: integer('friend_count').notNull().default(0),
@@ -24,7 +24,7 @@ export const users = pgTable(
 
 		lastLoginAt: timestamp('last_login_at'),
 		createdAt: timestamp('created_at').notNull().defaultNow(),
-		updatedAt: timestamp('updated_at').notNull().defaultNow(),
+		updatedAt: timestamp('updated_at').notNull().defaultNow(), // TODO: Actually make this update when the user is updated
 	},
 	(table) => ({
 		// Set index for friend count for efficient sorting/filtering by friend count

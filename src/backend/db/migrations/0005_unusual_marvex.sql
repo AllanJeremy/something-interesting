@@ -1,0 +1,1 @@
+ALTER TABLE "user_friends" DROP COLUMN IF EXISTS "nickname";

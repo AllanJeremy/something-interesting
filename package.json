@@ -8,8 +8,8 @@
 		"start": "wrangler dev",
 		"cf-typegen": "wrangler types",
 		"db:generate": "drizzle-kit generate",
-		"db:migrate": "tsx ./src/db/migrate.ts",
-		"test": "vitest run --pool=cloudflare-workers"
+		"db:migrate": "tsx ./src/backend/db/migrate.ts",
+		"test": "vitest"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.4.30",
@@ -20,7 +20,6 @@
 		"tsx": "^4.19.0",
 		"typescript": "^5.6.2",
 		"vitest": "1.5.0",
-		"vitest-environment-miniflare": "^2.14.3",
 		"wrangler": "^3.76.0"
 	},
 	"dependencies": {

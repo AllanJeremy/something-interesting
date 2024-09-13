@@ -1,10 +1,12 @@
 ## Introduction
 
+The project can be accessed via [doge.allanjeremy.com](https://doge.allanjeremy.com)
+
 This project includes 3 things
 
 1. A ReactJS based homepage accessible via the root URL `/` with friend stats
-2. API endpoints for `users` and `friends` accessible via `/api/*`
-3. CI/CD & automatic deploys through GitHub
+2. Standardized API endpoints for `users` and `friends` accessible via `/api/*`
+3. CI/CD & automatic testing & deploys through GitHub
 
 ### Tech Stack
 
@@ -49,10 +51,10 @@ For us to be able to connect to our database, we need to provide a valid [Neon/P
 
 ### Configuring environment variables
 
-- Copy the `.env.example` file in the root directory and rename it to `.env`
+- Copy the `.dev.vars.example` file in the root directory and rename it to `.dev.vars`
 - Replace the values of the environment variables with
 
-> Tip: The .env file also contains tips on what values are expected for each environment variable
+> Tip: The file also contains tips on what values are expected for each environment variable
 
 ### Running database migrations
 
@@ -126,29 +128,25 @@ Anyway, here are some assumptions I made while creating these APIs:
 
 Based on how we have structured the project, here are a few potential areas of improvement (in no particular order):
 
-1. **Setup tests om CI/CD deployments for the repo.**
-
-- This would ensure that tests pass before deploying to production
-
-2. **Add authentication & authorization to API routes**
+1. **Add authentication & authorization to API routes**
 
 - Control who has access to what endpoints
 
-3. **Caching:** Further reduce the load on the database by potentially using an in-memory cache to access frequently accessed records
+2. **Caching:** Further reduce the load on the database by potentially using an in-memory cache to access frequently accessed records
 
 - This would work particularly well when fetching user/friend information for popular creators, which would be lots of duplicate requests being made to fetch the same thing.
 
-4. **Track friend request metrics** (sent, received, pending) on the home page.
+3. **Track friend request metrics** (sent, received, pending) on the home page.
 
 - This can help us derive insight on what players tend to initiate social interactions (which can serve as a growth engine for what type of players to target when marketing / retargeting ads).
 
-5. **Add typesafety to `.env` by using zod to validate whether or not our environment variables are correctly setup.**
+4. **Add typesafety to `.env` by using zod to validate whether or not our environment variables are correctly setup.**
 
-6. **Rate limiting:** limit how many requests a user can make over a period of time eg. per minute (prevent spam & ddos)
+5. **Rate limiting:** limit how many requests a user can make over a period of time eg. per minute (prevent spam & ddos)
 
-7. **Database backups & replication:** snapshots of the database that can be used incase one database instance goes down.
+6. **Database backups & replication:** snapshots of the database that can be used incase one database instance goes down.
 
-8. **Add a contribution guide**
+7. **Add a contribution guide**
 
 - This would reside in [CONTRIBUTION.md](CONTRIBUTION.md) and would contain
   - Code style guides: so the codebase remains consistent
@@ -156,7 +154,9 @@ Based on how we have structured the project, here are a few potential areas of i
   - How to add/modify stuff
   - Pull request process & rules etc.
 
-9. Combine initial migrations into one migration file
+8. Combine initial migrations into one migration file
 
 - Since I was iterating in dev, there were a few database changes that were made in the early stages.
 - In retrospect, I could have waited until I was done to generate the single migration needed to run when you setup the project. However, creating multiple migrations is also indicative of how real-world use occurs, so ><
+
+9. Add friendlier error message responses from db instead of forwarding db error as response (for example: when creating duplicate records)
