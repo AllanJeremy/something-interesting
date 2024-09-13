@@ -1,5 +1,5 @@
 import { users, userFriends, userFriendsRelations } from '../db/schema';
-import { createDb } from '../db';
+import { createDbConnection, DatabaseConnection } from '../db';
 import { CreateUserData, CreateUserFriendData, User, UserFriendship } from '../types';
 import { and, or, desc, eq, ilike, SQL } from 'drizzle-orm';
 export class UserService {
@@ -13,14 +13,8 @@ export class UserService {
 
 	//#endregion Constants
 
-	//#region Constructor
-	// TODO: Consider making this a singleton when we have more services
-	private db: ReturnType<typeof createDb>;
-
-	constructor(private databaseUrl: string) {
-		this.db = createDb(databaseUrl);
-	}
-	//#endregion Constructor
+	// We pass in the database to avoid creating multiple connections
+	constructor(private db: DatabaseConnection) {}
 
 	/** A performant way to check if a user with a specific id exists
 	 * @param userId The id of the user to check for existence

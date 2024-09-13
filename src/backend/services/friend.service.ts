@@ -1,5 +1,5 @@
 import { SQL, and, eq, or } from 'drizzle-orm';
-import { createDb } from '../db';
+import { DatabaseConnection } from '../db';
 import { userFriends } from '../db/schema';
 import { CreateUserFriendData, UserFriendship } from '../types';
 import { UserService } from './user.service';
@@ -9,13 +9,7 @@ export class FriendService {
 	static DEFAULT_FRIENDS_PER_PAGE = 25;
 	//#endregion Constants
 
-	//#region Constructor
-	private db: ReturnType<typeof createDb>;
-
-	constructor(private databaseUrl: string, private userService: UserService) {
-		this.db = createDb(databaseUrl);
-	}
-	//#endregion Constructor
+	constructor(private db: DatabaseConnection, private userService: UserService) {}
 
 	private _getUserInitiatedFriendRequestQuery(userId: string, friendUserId: string): SQL {
 		return and(eq(userFriends.userId, userId), eq(userFriends.friendUserId, friendUserId)) as SQL;
