@@ -27,6 +27,7 @@ export class UserService {
 	 * @param userId The id of the user to check for existence
 	 */
 	private async _userExists(userId: string): Promise<boolean> {
+		// TODO: Debug this -> currently fails with db error when record is not found
 		const userExists = await this.db.select().from(users).where(eq(users.id, userId)).limit(1);
 
 		return userExists.length > 0;
@@ -166,32 +167,34 @@ export class UserService {
 	/**
 	 * Confirms a friend request between two users
 	 * @param userId The id of the user initiating the friend request
-	 * @param friendUserId The id of the user receiving the friend request
+	 * @param friendshipId The id of the friendship to be confirmed
 	 * @returns The friend request that was confirmed
 	 */
-	public async confirmFriendRequest(userId: string, friendUserId: string): Promise<UserFriendship> {
-		const bothUserAndFriendExist = await this._bothUserAndFriendExist(userId, friendUserId);
+	public async confirmFriendRequest(userId: string, friendshipId: string): Promise<UserFriendship> {
+		const userExists = await this._userExists(userId);
 
-		if (!bothUserAndFriendExist) {
-			throw new Error('One or both users (initiator or receiver) do not exist');
+		if (!userExists) {
+			throw new Error('User does not exist');
 		}
 
-		// Specifically get the friend request received by the user ~
-		const existingFriendInitiatedFriendship = await this._getUserFriendship(
-			userId,
-			friendUserId,
-			this._getFriendInitiatedFriendRequestQuery
-		);
+		// Specifically get the friend request received by the user
+		// This ensures that only the recipient of the friend request can confirm it
+		const friendshipCondition = and(eq(userFriends.id, friendshipId), eq(userFriends.friendUserId, userId));
 
-		// A user can only confirm a friend request they have received ~ not one they have initiated
-		if (!existingFriendInitiatedFriendship) {
-			// A user can only confirm a friend request they have received ~ not one they have initiated
-			throw new Error(
-				'No pending friend request to confirm. Note: You can only confirm requests you have received, not ones you have initiated.'
-			);
+		const existingFriendshipRequestResult = await this.db
+			.select()
+			.from(userFriends)
+			.where(friendshipCondition)
+			.prepare('get_friendship_request')
+			.execute();
+
+		if (existingFriendshipRequestResult.length === 0) {
+			throw new Error('Friendship request not found (or you did not receive this request)');
 		}
 
-		if (existingFriendInitiatedFriendship.isConfirmed) {
+		const existingFriendshipRequest = existingFriendshipRequestResult[0];
+
+		if (existingFriendshipRequest.isConfirmed) {
 			throw new Error('Users are already friends.');
 		}
 
@@ -200,7 +203,7 @@ export class UserService {
 		const updatedUserFriendshipResponse = await this.db
 			.update(userFriends)
 			.set({ isConfirmed: true })
-			.where(eq(userFriends.id, existingFriendInitiatedFriendship.id))
+			.where(eq(userFriends.id, existingFriendshipRequest.id))
 			.returning()
 			.prepare('confirm_friend_request')
 			.execute();
@@ -211,20 +214,30 @@ export class UserService {
 	/**
 	 * Removes a friend request between two users
 	 * @param userId The id of the user that initiated the friend request
-	 * @param friendUserId The id of the user receiving the friend request
+	 * @param friendshipId The id of the friendship to be removed
 	 * @returns The friend request that was removed
 	 */
-	public async removeFriend(userId: string, friendUserId: string): Promise<string> {
-		const existingFriendship = await this._getUserFriendship(userId, friendUserId);
+	public async removeFriend(userId: string, friendshipId: string): Promise<UserFriendship> {
+		// Make sure that the friendship exists and that the user is the one that initiated the friendship
+		const friendshipCondition = and(eq(userFriends.id, friendshipId), eq(userFriends.userId, userId));
+		const existingFriendshipResult = await this.db
+			.select()
+			.from(userFriends)
+			.where(friendshipCondition)
+			.prepare('get_friendship')
+			.execute();
 
-		if (!existingFriendship) {
-			throw new Error('Users are not friends. No friend request to remove.');
+		// Check if the friendship exists
+		if (existingFriendshipResult.length === 0) {
+			throw new Error('Friendship does not exist'); // TODO: Return NotFoundError
 		}
+
+		const existingFriendship = existingFriendshipResult[0];
 
 		//* Getting here means the friendship exists
 		//? A user can remove a friend whether or not they are the one that initiated the friendship
 
-		// Remove the friend request
+		// delete the friendship
 		const deletedUserFriendship = await this.db
 			.delete(userFriends)
 			.where(eq(userFriends.id, existingFriendship.id))
@@ -232,7 +245,7 @@ export class UserService {
 			.prepare('remove_friend')
 			.execute();
 
-		return deletedUserFriendship[0].id;
+		return deletedUserFriendship[0];
 	}
 
 	public async getUserFriendList(userId: string, limit = UserService.DEFAULT_FRIENDS_PER_PAGE, offset = 0): Promise<UserFriendship[]> {
