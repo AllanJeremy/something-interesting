@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { Env, Vars } from '../backend.routes';
 import { generateApiErrorResponse, generateApiSuccessResponse } from '../utils/api.utils';
 import { CreateUserData, User } from '../types';
+import { UserService } from '../services/user.service';
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
@@ -32,7 +33,12 @@ app.post('/', async (c) => {
 app.get('/', async (c) => {
 	const userService = c.get('userService');
 
-	const usersFound: User[] = await userService.getAllUsers();
+	// Get query parameters with default values
+	const searchQuery: string | null = c.req.query('search') || null;
+	const limit = parseInt(c.req.query('limit') || String(UserService.DEFAULT_USERS_PER_PAGE));
+	const offset = parseInt(c.req.query('offset') || '0');
+
+	const usersFound: User[] = await userService.getAllUsers(searchQuery, limit, offset);
 
 	return c.json({ message: 'listing all users', data: usersFound });
 });
