@@ -140,7 +140,11 @@ describe('UserService', () => {
 
 		describe('Remove friend', () => {
 			describe('Valid inputs', () => {
-				it('should remove a friend successfully', async () => {
+				it('should allow friendship initiator to remove friend as a friend', async () => {
+					// TODO: Implement test
+				});
+
+				it('should allow friend to remove friendship initiator as a friend', async () => {
 					// TODO: Implement test
 				});
 

@@ -219,7 +219,11 @@ export class UserService {
 	 */
 	public async removeFriend(userId: string, friendshipId: string): Promise<UserFriendship> {
 		// Make sure that the friendship exists and that the user is the one that initiated the friendship
-		const friendshipCondition = and(eq(userFriends.id, friendshipId), eq(userFriends.userId, userId));
+		const friendshipCondition = and(
+			eq(userFriends.id, friendshipId),
+			or(eq(userFriends.userId, userId), eq(userFriends.friendUserId, userId))
+		);
+
 		const existingFriendshipResult = await this.db
 			.select()
 			.from(userFriends)
@@ -249,9 +253,10 @@ export class UserService {
 	}
 
 	public async getUserFriendList(userId: string, limit = UserService.DEFAULT_FRIENDS_PER_PAGE, offset = 0): Promise<UserFriendship[]> {
-		// TODO: Check if the user exists
-		// TODO: Fetch the friend list
-		const userFriendships = await this.db.select().from(userFriends).where(eq(userFriends.userId, userId)).limit(limit).offset(offset);
+		// Get all friendships where the user is either the initiator or the receiver
+		const friendshipCondition = or(eq(userFriends.userId, userId), eq(userFriends.friendUserId, userId));
+
+		const userFriendships = await this.db.select().from(userFriends).where(friendshipCondition).limit(limit).offset(offset);
 
 		return userFriendships;
 	}
