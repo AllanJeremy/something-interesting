@@ -11,10 +11,24 @@ export class FriendService {
 
 	constructor(private db: DatabaseConnection, private userService: UserService) {}
 
+	/**
+	 * Generates a SQL query condition for a user-initiated friend request
+	 * @description This method creates a SQL condition to check if a specific user has sent a friend request to another user
+	 * @param userId The id of the user who initiated the friend request
+	 * @param friendUserId The id of the user who received the friend request
+	 * @returns {SQL} A SQL condition for the user-initiated friend request
+	 */
 	private _getUserInitiatedFriendRequestQuery(userId: string, friendUserId: string): SQL {
 		return and(eq(userFriends.userId, userId), eq(userFriends.friendUserId, friendUserId)) as SQL;
 	}
 
+	/**
+	 * Generates a SQL query condition for a friend-initiated friend request
+	 * @description This method creates a SQL condition to check if a specific user has received a friend request from another user
+	 * @param userId The id of the user who received the friend request
+	 * @param friendUserId The id of the user who sent the friend request
+	 * @returns {SQL} A SQL condition for the friend-initiated friend request
+	 */
 	private _getFriendInitiatedFriendRequestQuery(userId: string, friendUserId: string): SQL {
 		return and(eq(userFriends.userId, friendUserId), eq(userFriends.friendUserId, userId)) as SQL;
 	}

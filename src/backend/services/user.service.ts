@@ -16,8 +16,12 @@ export class UserService {
 	// We pass in the database to avoid creating multiple connections
 	constructor(private db: DatabaseConnection) {}
 
-	/** A performant way to check if a user with a specific id exists
+	/**
+	 * Checks if a user with a specific id exists in the database
+	 * @description This method provides a performant way to verify the existence of a user
+	 * without fetching all user data
 	 * @param userId The id of the user to check for existence
+	 * @returns {Promise<boolean>} A promise that resolves to `true` if the user exists, `false` otherwise
 	 */
 	public async userExists(userId: string): Promise<boolean> {
 		// TODO: Debug this -> currently fails with db error when record is not found
@@ -26,6 +30,11 @@ export class UserService {
 		return userExists.length > 0;
 	}
 
+	/**
+	 * Creates a new user in the database
+	 * @param createUserData The data for the user to create
+	 * @returns {Promise<User>} A promise that resolves to the created user
+	 */
 	public async createUser(createUserData: CreateUserData): Promise<User> {
 		const createdUser = await this.db
 			.insert(users)
@@ -38,8 +47,14 @@ export class UserService {
 		return createdUser[0];
 	}
 
-	//? Consider adding a search query param to this endpoint in future
-	public async getAllUsers(searchQuery?: string, limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0): Promise<User[]> {
+	/**
+	 * Retrieves a list of users from the database
+	 * @param searchQuery An optional search query to filter users by username
+	 * @param limit The number of users to retrieve per page
+	 * @param offset The number of users to skip
+	 * @returns {Promise<User[]>} A promise that resolves to an array of User objects
+	 */
+	public async getAllUsers(searchQuery: string | null = null, limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0): Promise<User[]> {
 		// Only search by username while searching for users
 		const searchCondition = searchQuery ? ilike(users.username, `%${searchQuery.toLowerCase()}%`) : undefined;
 
