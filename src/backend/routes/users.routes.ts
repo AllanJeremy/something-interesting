@@ -36,7 +36,7 @@ app.get('/', async (c) => {
 	// Get query parameters with default values
 	const searchQuery: string | null = c.req.query('search') || null;
 	const limit = parseInt(c.req.query('limit') || String(UserService.DEFAULT_USERS_PER_PAGE));
-	const page = parseInt(c.req.query('pages') || '1');
+	const page = parseInt(c.req.query('page') || '1');
 
 	const usersFound: User[] = await userService.getAllUsers(searchQuery, limit, page);
 

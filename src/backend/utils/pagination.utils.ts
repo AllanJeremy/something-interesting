@@ -6,5 +6,7 @@
  * @returns {number} The calculated offset
  */
 export function calculateOffset(page: number, limit: number): number {
-	return (page - 1) * limit;
+	const offset = (page - 1) * limit;
+
+	return offset;
 }
