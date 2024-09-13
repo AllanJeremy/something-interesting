@@ -1,7 +1,8 @@
 import { SQL, and, eq, or } from 'drizzle-orm';
 import { createDb } from '../db';
-import { users, userFriends } from '../db/schema';
-import { CreateUserFriendData, User, UserFriendship } from '../types';
+import { userFriends } from '../db/schema';
+import { CreateUserFriendData, UserFriendship } from '../types';
+import { UserService } from './user.service';
 
 export class FriendService {
 	//#region Constants
@@ -11,20 +12,10 @@ export class FriendService {
 	//#region Constructor
 	private db: ReturnType<typeof createDb>;
 
-	constructor(private databaseUrl: string) {
+	constructor(private databaseUrl: string, private userService: UserService) {
 		this.db = createDb(databaseUrl);
 	}
 	//#endregion Constructor
-
-	/** A performant way to check if a user with a specific id exists
-	 * @param userId The id of the user to check for existence
-	 */
-	private async _userExists(userId: string): Promise<boolean> {
-		// TODO: Debug this -> currently fails with db error when record is not found
-		const userExists = await this.db.select().from(users).where(eq(users.id, userId)).limit(1);
-
-		return userExists.length > 0;
-	}
 
 	private _getUserInitiatedFriendRequestQuery(userId: string, friendUserId: string): SQL {
 		return and(eq(userFriends.userId, userId), eq(userFriends.friendUserId, friendUserId)) as SQL;
@@ -82,8 +73,8 @@ export class FriendService {
 	 * @returns `true` if both users exist, `false` otherwise
 	 */
 	private async _bothUserAndFriendExist(userId: string, friendUserId: string): Promise<boolean> {
-		const userExists = await this._userExists(userId);
-		const friendUserExists = await this._userExists(friendUserId);
+		const userExists = await this.userService.userExists(userId);
+		const friendUserExists = await this.userService.userExists(friendUserId);
 
 		return userExists && friendUserExists;
 	}
@@ -136,7 +127,7 @@ export class FriendService {
 	 * @returns The friend request that was confirmed
 	 */
 	public async confirmFriendRequest(userId: string, friendshipId: string): Promise<UserFriendship> {
-		const userExists = await this._userExists(userId);
+		const userExists = await this.userService.userExists(userId);
 
 		if (!userExists) {
 			throw new Error('User does not exist');

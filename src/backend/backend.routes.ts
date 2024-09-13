@@ -26,7 +26,7 @@ app.use('*', async (c, next) => {
 	const userService = new UserService(c.env.DATABASE_URL);
 	c.set('userService', userService);
 
-	const friendService = new FriendService(c.env.DATABASE_URL);
+	const friendService = new FriendService(c.env.DATABASE_URL, userService);
 	c.set('friendService', friendService);
 
 	await next();

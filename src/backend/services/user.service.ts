@@ -22,6 +22,16 @@ export class UserService {
 	}
 	//#endregion Constructor
 
+	/** A performant way to check if a user with a specific id exists
+	 * @param userId The id of the user to check for existence
+	 */
+	public async userExists(userId: string): Promise<boolean> {
+		// TODO: Debug this -> currently fails with db error when record is not found
+		const userExists = await this.db.select().from(users).where(eq(users.id, userId)).limit(1);
+
+		return userExists.length > 0;
+	}
+
 	public async createUser(createUserData: CreateUserData): Promise<User> {
 		const createdUser = await this.db
 			.insert(users)
