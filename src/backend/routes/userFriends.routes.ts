@@ -25,6 +25,8 @@ app.post('/', async (c) => {
 
 		return c.json(apiResponse, 201);
 	} catch (error) {
+		console.error('Error sending friend request: ', error);
+
 		const apiErrorResponse = generateApiErrorResponse(error, 'Failed to send friend request');
 
 		return c.json(apiErrorResponse, 500); // TODO: Handle different types of errors with specific status codes
@@ -46,6 +48,7 @@ app.get('/', async (c) => {
 
 		return c.json(apiResponse);
 	} catch (error) {
+		console.error('Error retrieving friend list: ', error);
 		const apiErrorResponse = generateApiErrorResponse(error, 'Failed to retrieve friend list');
 
 		return c.json(apiErrorResponse);
@@ -79,7 +82,28 @@ app.patch('/:friendshipId', async (c) => {
 
 // Remove a friend from a user’s friend list.
 app.delete('/:friendshipId', async (c) => {
-	return c.json({ message: 'removing a friend from a user’s friend list' });
+	// TODO: Add validation for the request body & params using Zod
+	const userService = c.get('userService');
+	const userId = c.get('userId') as string;
+	const friendshipId = c.req.param('friendshipId');
+
+	console.debug('friendshipId: ', friendshipId);
+	if (!friendshipId) {
+		const apiErrorResponse = generateApiErrorResponse('Friendship ID is required', 'Validation error');
+		return c.json(apiErrorResponse, 400);
+	}
+
+	try {
+		const removedFriendship = await userService.removeFriend(userId, friendshipId);
+		const apiResponse = generateApiSuccessResponse(removedFriendship, 'Friend removed successfully');
+
+		return c.json(apiResponse);
+	} catch (error) {
+		console.error('Error removing friend: ', error);
+		const apiErrorResponse = generateApiErrorResponse(error, 'Failed to remove friend');
+
+		return c.json(apiErrorResponse);
+	}
 });
 
 export default app;
