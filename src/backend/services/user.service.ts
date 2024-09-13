@@ -1,7 +1,7 @@
-import { users, userFriends, userFriendsRelations } from '../db/schema';
-import { createDbConnection, DatabaseConnection } from '../db';
-import { CreateUserData, CreateUserFriendData, User, UserFriendship } from '../types';
-import { and, or, desc, eq, ilike, SQL } from 'drizzle-orm';
+import { users } from '../db/schema';
+import { DatabaseConnection } from '../db';
+import { CreateUserData, User } from '../types';
+import { desc, eq, ilike } from 'drizzle-orm';
 export class UserService {
 	//#region Constants
 	//* These values never change from instance to instance - so we make them static
