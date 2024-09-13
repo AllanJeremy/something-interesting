@@ -1,5 +1,7 @@
 ## Introduction
 
+The project can be accessed via [doge.allanjeremy.com](https://doge.allanjeremy.com)
+
 This project includes 3 things
 
 1. A ReactJS based homepage accessible via the root URL `/` with friend stats
