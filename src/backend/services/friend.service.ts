@@ -222,11 +222,17 @@ export class FriendService {
 	 * Retrieves a list of user friendships for a given user
 	 * @description This function fetches all friendships where the user is either the initiator or the receiver
 	 * @param userId The id of the user to fetch friendships for
+	 * @param search The search query for filtering friends (optional)
 	 * @param limit The maximum number of friendships to return (default: FriendService.DEFAULT_FRIENDS_PER_PAGE)
 	 * @param page The page number for pagination (starting at 1)
 	 * @returns {Promise<UserFriendship[]>} A promise that resolves to an array of UserFriendship objects
 	 */
-	public async getUserFriendList(userId: string, limit = FriendService.DEFAULT_FRIENDS_PER_PAGE, page = 1): Promise<UserFriendship[]> {
+	public async getUserFriendList(
+		userId: string,
+		search: string | null = null,
+		limit = FriendService.DEFAULT_FRIENDS_PER_PAGE,
+		page = 1
+	): Promise<UserFriendship[]> {
 		//TODO: Add search friends option
 
 		// Get all friendships where the user is either the initiator or the receiver
