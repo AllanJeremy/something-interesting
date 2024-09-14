@@ -4,6 +4,7 @@ import { userFriends } from '../db/schema';
 import { CreateUserFriendData, UserFriendship } from '../types';
 import { UserService } from './user.service';
 import { calculateOffset } from '../utils/pagination.utils';
+import { ConflictError, ForbiddenError, NotFoundError } from '../utils/error.utils';
 
 export class FriendService {
 	//#region Constants
@@ -96,20 +97,20 @@ export class FriendService {
 	 */
 	public async addFriend(userId: string, friendUserId: string): Promise<UserFriendship> {
 		if (userId === friendUserId) {
-			throw new Error('You cannot add yourself as a friend');
+			throw new ForbiddenError('You cannot add yourself as a friend');
 		}
 
 		const bothUserAndFriendExist = await this._bothUserAndFriendExist(userId, friendUserId);
 
 		// Both users must exist for the friend request to be sent
 		if (!bothUserAndFriendExist) {
-			throw new Error('One or both users (initiator or receiver) do not exist');
+			throw new NotFoundError('One or both users (initiator or receiver) do not exist');
 		}
 
 		const usersAreFriends = await this._areFriendsOrHavePendingRequest(userId, friendUserId);
 
 		if (usersAreFriends) {
-			throw new Error('Users are already friends or there is an existing pending request');
+			throw new ConflictError('Users are already friends or there is an existing pending request');
 		}
 
 		//* Getting here means both users exist and are not friends
@@ -139,7 +140,7 @@ export class FriendService {
 		const userExists = await this.userService.userExists(userId);
 
 		if (!userExists) {
-			throw new Error('User does not exist');
+			throw new NotFoundError('User does not exist');
 		}
 
 		// Specifically get the friend request received by the user
@@ -154,13 +155,13 @@ export class FriendService {
 			.execute();
 
 		if (existingFriendshipRequestResult.length === 0) {
-			throw new Error('Friendship request not found (or you did not receive this request)');
+			throw new NotFoundError('Friendship request not found (or you did not receive this request)');
 		}
 
 		const existingFriendshipRequest = existingFriendshipRequestResult[0];
 
 		if (existingFriendshipRequest.isConfirmed) {
-			throw new Error('Users are already friends.');
+			throw new ConflictError('Users are already friends.');
 		}
 
 		//* Getting here means the friend request exists and is still pending
@@ -198,7 +199,7 @@ export class FriendService {
 
 		// Check if the friendship exists
 		if (existingFriendshipResult.length === 0) {
-			throw new Error('Friendship does not exist'); // TODO: Return NotFoundError
+			throw new NotFoundError('Friendship does not exist'); // TODO: Return NotFoundError
 		}
 
 		const existingFriendship = existingFriendshipResult[0];
