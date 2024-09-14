@@ -10,6 +10,7 @@ import userFriendsRoutes from './routes/userFriends.routes';
 //#region Service imports
 import { UserService } from './services/user.service';
 import { FriendService } from './services/friend.service';
+import { handleApiError } from './utils/api.utils';
 //#endregion Service imports
 
 export type Env = {
@@ -73,5 +74,11 @@ app.use('/users/:userId/*', async (c, next) => {
 app.route('/users', userRoutes);
 app.route('/users/:userId/friends', userFriendsRoutes);
 //#endregion Routes
+
+//#region Error handling
+app.onError((error, c) => {
+	return handleApiError(c, error);
+});
+//#endregion Error handling
 
 export default app;
