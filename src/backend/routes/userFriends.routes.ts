@@ -1,7 +1,8 @@
 import { Hono } from 'hono';
 import { Env, Vars } from '../backend.routes';
-import { generateApiErrorResponse, generateApiSuccessResponse } from '../utils/api.utils';
+import { handleApiSuccess, handleApiError } from '../utils/api.utils';
 import { FriendService } from '../services/friend.service';
+import { BadRequestError } from '../utils/error.utils';
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
@@ -11,25 +12,19 @@ app.post('/', async (c) => {
 	const userId = c.get('userId') as string;
 
 	const body = await c.req.json();
-	const friendUserId = body.friendUserId; // TODO: Add validation for the request body using Zod
+	const friendUserId = body.friendUserId;
 
+	// TODO: Handle this in zod middleware
 	if (!friendUserId) {
-		const apiErrorResponse = generateApiErrorResponse('Friend user ID is required', 'Validation error');
-
-		return c.json(apiErrorResponse, 400);
+		throw new BadRequestError('Validation error: Friend user ID is required');
 	}
 
 	try {
 		const createdFriendship = await friendService.addFriend(userId, friendUserId);
-		const apiResponse = generateApiSuccessResponse(createdFriendship, 'Friend request sent successfully');
 
-		return c.json(apiResponse, 201);
+		return handleApiSuccess(c, createdFriendship, 'Friend request sent successfully', 201);
 	} catch (error) {
-		console.error('Error sending friend request: ', error);
-
-		const apiErrorResponse = generateApiErrorResponse(error, 'Failed to send friend request');
-
-		return c.json(apiErrorResponse, 500); // TODO: Handle different types of errors with specific status codes
+		return handleApiError(c, error);
 	}
 });
 
@@ -44,14 +39,10 @@ app.get('/', async (c) => {
 
 	try {
 		const friendList = await friendService.getUserFriendList(userId, limit, page);
-		const apiResponse = generateApiSuccessResponse(friendList, 'Friend list retrieved successfully');
 
-		return c.json(apiResponse);
+		return handleApiSuccess(c, friendList, 'Friend list retrieved successfully');
 	} catch (error) {
-		console.error('Error retrieving friend list: ', error);
-		const apiErrorResponse = generateApiErrorResponse(error, 'Failed to retrieve friend list');
-
-		return c.json(apiErrorResponse);
+		return handleApiError(c, error);
 	}
 });
 
@@ -61,22 +52,17 @@ app.patch('/:friendshipId', async (c) => {
 	const userId = c.get('userId') as string;
 	const friendshipId = c.req.param('friendshipId');
 
+	// TODO: Handle this in zod middleware
 	if (!friendshipId) {
-		const apiErrorResponse = generateApiErrorResponse('Friendship ID is required', 'Validation error');
-
-		return c.json(apiErrorResponse, 400);
+		return handleApiError(c, new BadRequestError('Validation error:Friendship ID is required'));
 	}
 
 	try {
 		const confirmedFriendship = await friendService.confirmFriendRequest(userId, friendshipId);
-		const apiResponse = generateApiSuccessResponse(confirmedFriendship, 'Friend request confirmed successfully');
 
-		return c.json(apiResponse);
+		return handleApiSuccess(c, confirmedFriendship, 'Friend request confirmed successfully');
 	} catch (error) {
-		console.error('Error confirming friend request: ', error);
-		const apiErrorResponse = generateApiErrorResponse(error, 'Failed to confirm friend request');
-
-		return c.json(apiErrorResponse);
+		return handleApiError(c, error);
 	}
 });
 
@@ -87,22 +73,17 @@ app.delete('/:friendshipId', async (c) => {
 	const userId = c.get('userId') as string;
 	const friendshipId = c.req.param('friendshipId');
 
-	console.debug('friendshipId: ', friendshipId);
+	// TODO: Handle this in zod middleware
 	if (!friendshipId) {
-		const apiErrorResponse = generateApiErrorResponse('Friendship ID is required', 'Validation error');
-		return c.json(apiErrorResponse, 400);
+		throw new BadRequestError('Validation error:Friendship ID is required');
 	}
 
 	try {
 		const removedFriendship = await friendService.removeFriend(userId, friendshipId);
-		const apiResponse = generateApiSuccessResponse(removedFriendship, 'Friend removed successfully');
 
-		return c.json(apiResponse);
+		return handleApiSuccess(c, removedFriendship, 'Friend removed successfully');
 	} catch (error) {
-		console.error('Error removing friend: ', error);
-		const apiErrorResponse = generateApiErrorResponse(error, 'Failed to remove friend');
-
-		return c.json(apiErrorResponse);
+		return handleApiError(c, error);
 	}
 });
 
