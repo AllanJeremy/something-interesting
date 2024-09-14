@@ -3,11 +3,13 @@ import { Env, Vars } from '../backend.routes';
 import { handleApiSuccess, handleApiError } from '../utils/api.utils';
 import { FriendService } from '../services/friend.service';
 import { BadRequestError } from '../utils/error.utils';
+import { validateAddFriend, validateFriendshipIdParam } from '../middleware/friend.middleware';
+import { validatePaginationQuery } from '../middleware/pagination.middleware';
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
 // Add a friend to a user's friend list.
-app.post('/', async (c) => {
+app.post('/', validateAddFriend, async (c) => {
 	const friendService = c.get('friendService');
 	const userId = c.get('userId') as string;
 
@@ -29,7 +31,7 @@ app.post('/', async (c) => {
 });
 
 // Retrieve a list of all friends for a given user.
-app.get('/', async (c) => {
+app.get('/', validatePaginationQuery, async (c) => {
 	const friendService = c.get('friendService');
 	const userId = c.get('userId') as string;
 
@@ -47,15 +49,10 @@ app.get('/', async (c) => {
 });
 
 // Confirm a friend request
-app.patch('/:friendshipId', async (c) => {
+app.patch('/:friendshipId', validateFriendshipIdParam, async (c) => {
 	const friendService = c.get('friendService');
 	const userId = c.get('userId') as string;
 	const friendshipId = c.req.param('friendshipId');
-
-	// TODO: Handle this in zod middleware
-	if (!friendshipId) {
-		throw new BadRequestError('Validation error: Friendship ID is required');
-	}
 
 	try {
 		const confirmedFriendship = await friendService.confirmFriendRequest(userId, friendshipId);
@@ -67,7 +64,7 @@ app.patch('/:friendshipId', async (c) => {
 });
 
 // Remove a friend from a user's friend list.
-app.delete('/:friendshipId', async (c) => {
+app.delete('/:friendshipId', validateFriendshipIdParam, async (c) => {
 	// TODO: Add validation for the request body & params using Zod
 	const friendService = c.get('friendService');
 	const userId = c.get('userId') as string;

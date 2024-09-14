@@ -3,7 +3,8 @@ import { Env, Vars } from '../backend.routes';
 import { handleApiError, handleApiSuccess } from '../utils/api.utils';
 import { CreateUserData, User } from '../types';
 import { UserService } from '../services/user.service';
-import { validateCreateUser, validateGetUsersQuery } from '../middleware/user.middleware';
+import { validateCreateUser } from '../middleware/user.middleware';
+import { validatePaginationQuery } from '../middleware/pagination.middleware';
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
@@ -27,7 +28,7 @@ app.post('/', validateCreateUser, async (c) => {
 });
 
 // Get users
-app.get('/', validateGetUsersQuery, async (c) => {
+app.get('/', validatePaginationQuery, async (c) => {
 	const userService = c.get('userService');
 
 	try {
