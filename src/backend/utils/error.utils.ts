@@ -1,3 +1,4 @@
+// This file contains custom error classes that extend the base Error class - we are not using HTTPException because we want to have more control over the error responses
 import { StatusCode } from 'hono/utils/http-status';
 
 export class ApiError extends Error {
