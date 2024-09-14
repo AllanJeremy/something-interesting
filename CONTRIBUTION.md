@@ -48,3 +48,12 @@ This system ensures that:
 - Both users have control over their friendships
 
 Remember these concepts when working with the friend request functionality in the codebase!
+
+## Naming Conventions
+
+When working on this project, please adhere to the following naming conventions:
+
+### Underscore Prefix (\_)
+
+- In classes: Names that start with an underscore (\_) indicate private methods.
+- In non-class files: Names starting with an underscore (\_) represent non-exported members of the file's context.
