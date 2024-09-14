@@ -11,6 +11,7 @@ import userFriendsRoutes from './routes/userFriends.routes';
 import { UserService } from './services/user.service';
 import { FriendService } from './services/friend.service';
 import { handleApiError } from './utils/api.utils';
+import { InternalServerError } from './utils/error.utils';
 //#endregion Service imports
 
 export type Env = {
@@ -77,7 +78,7 @@ app.route('/users/:userId/friends', userFriendsRoutes);
 
 //#region Error handling
 app.onError((error, c) => {
-	return handleApiError(c, error);
+	return handleApiError(c, new InternalServerError(error.message));
 });
 //#endregion Error handling
 
