@@ -18,20 +18,4 @@ export const validateCreateUser = zValidator('json', _createUserSchema, (result,
 	}
 });
 
-//
-const getUsersSchema = z.object({
-	search: z.string().optional(),
-	limit: z.number().optional(),
-	page: z.number().optional(),
-});
-
-/**
- * Validates the query parameters of a users search request
- */
-export const validateGetUsersQuery = zValidator('query', getUsersSchema, (result, c) => {
-	if (!result.success) {
-		return handleApiError(c, result.error);
-	}
-});
-
 //#endregion Validations
