@@ -3,6 +3,7 @@ import { Context } from 'hono';
 import { ApiErrorResponse, ApiSuccessResponse } from '../types';
 import { ApiError } from './error.utils';
 import { StatusCode } from 'hono/utils/http-status';
+import { ZodError } from 'zod';
 
 /**
  * Generates an API error response object
@@ -53,6 +54,9 @@ export function handleApiSuccess<T>(context: Context, data: T, message?: string,
 	return context.json(apiResponse, statusCode);
 }
 
+// TODO: Get friendly error messages from Zod
+// TODO: Handle DB errors
+
 /**
  * Handles API errors and generates appropriate responses
  * @description This function processes errors thrown during API operations and creates standardized error responses
@@ -70,6 +74,9 @@ export function handleApiError<E = any>(context: Context, error: E) {
 	// if api error, use the status code from the error
 	if (error instanceof ApiError) {
 		statusCode = error.status;
+	} else if (error instanceof ZodError) {
+		statusCode = 400;
+		console.error('[zod error]', error.format());
 	}
 
 	if (error instanceof ApiError || error instanceof Error) {

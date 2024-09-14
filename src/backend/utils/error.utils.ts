@@ -45,3 +45,5 @@ export class InternalServerError extends ApiError {
 		super(`Internal Server Error: ${message}`, cause, 500);
 	}
 }
+
+// TODO: Get friendly error messages from Zod

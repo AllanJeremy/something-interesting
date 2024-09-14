@@ -227,6 +227,8 @@ export class FriendService {
 	 * @returns {Promise<UserFriendship[]>} A promise that resolves to an array of UserFriendship objects
 	 */
 	public async getUserFriendList(userId: string, limit = FriendService.DEFAULT_FRIENDS_PER_PAGE, page = 1): Promise<UserFriendship[]> {
+		//TODO: Add search friends option
+
 		// Get all friendships where the user is either the initiator or the receiver
 		const friendshipCondition = or(eq(userFriends.userId, userId), eq(userFriends.friendUserId, userId));
 
