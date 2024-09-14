@@ -3,13 +3,12 @@ import { Env, Vars } from '../backend.routes';
 import { handleApiError, handleApiSuccess } from '../utils/api.utils';
 import { CreateUserData, User } from '../types';
 import { UserService } from '../services/user.service';
+import { validateCreateUser, validateGetUsersQuery } from '../middleware/user.middleware';
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
-//#region Users
-// Create a new user.
-//TODO: Add validation for the request body using Zod
-app.post('/', async (c) => {
+// Create user
+app.post('/', validateCreateUser, async (c) => {
 	try {
 		const userService = c.get('userService');
 
@@ -27,8 +26,8 @@ app.post('/', async (c) => {
 	}
 });
 
-// Retrieve a list of all users.
-app.get('/', async (c) => {
+// Get users
+app.get('/', validateGetUsersQuery, async (c) => {
 	const userService = c.get('userService');
 
 	try {
@@ -44,7 +43,5 @@ app.get('/', async (c) => {
 		return handleApiError(c, error);
 	}
 });
-
-//#endregion Users
 
 export default app;
