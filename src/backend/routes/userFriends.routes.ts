@@ -54,7 +54,7 @@ app.patch('/:friendshipId', async (c) => {
 
 	// TODO: Handle this in zod middleware
 	if (!friendshipId) {
-		return handleApiError(c, new BadRequestError('Validation error:Friendship ID is required'));
+		throw new BadRequestError('Validation error: Friendship ID is required');
 	}
 
 	try {
