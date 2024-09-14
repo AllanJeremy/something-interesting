@@ -69,7 +69,7 @@ export function handleApiError<E = any>(context: Context, error: E) {
 
 	// if api error, use the status code from the error
 	if (error instanceof ApiError) {
-		statusCode = error.statusCode;
+		statusCode = error.status;
 	}
 
 	if (error instanceof ApiError || error instanceof Error) {
