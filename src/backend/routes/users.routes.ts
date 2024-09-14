@@ -12,13 +12,7 @@ const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 app.post('/', validateCreateUser, async (c) => {
 	try {
 		const userService = c.get('userService');
-
-		const body = await c.req.json();
-		const createUserData: CreateUserData = {
-			username: body.username,
-			email: body.email,
-		};
-
+		const createUserData = c.req.valid('json');
 		const userCreated: User = await userService.createUser(createUserData);
 
 		return handleApiSuccess(c, userCreated, 'User created');
