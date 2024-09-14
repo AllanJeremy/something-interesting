@@ -1,4 +1,17 @@
+// relies on: error.utils.ts & types/ApiResponse.types.ts
+import { Context } from 'hono';
 import { ApiErrorResponse, ApiSuccessResponse } from '../types';
+import { ApiError } from './error.utils';
+import { StatusCode } from 'hono/utils/http-status';
+
+/**
+ * Generates an API error response object
+ * @description This function creates a standardized error response object for API errors
+ * @template E The type of the error object
+ * @param {E} error The error object or message
+ * @param {string} [message] An optional custom error message
+ * @returns {ApiErrorResponse<E>} A standardized API error response object
+ */
 
 export function generateApiErrorResponse<E = unknown>(error: E, message?: string): ApiErrorResponse<E> {
 	return {
@@ -8,10 +21,44 @@ export function generateApiErrorResponse<E = unknown>(error: E, message?: string
 	};
 }
 
+/**
+ * Generates an API success response object
+ * @description This function creates a standardized success response object for API responses
+ * @template T The type of the data being returned
+ * @param {T} data The data to be included in the response
+ * @param {string} [message] An optional custom success message
+ * @returns {ApiSuccessResponse<T>} A standardized API success response object
+ */
 export function generateApiSuccessResponse<T>(data: T, message?: string): ApiSuccessResponse<T> {
 	return {
 		ok: true,
 		data,
 		message: message ?? 'Action was successful',
 	};
+}
+
+/**
+ * Handles API errors and generates appropriate responses
+ * @description This function processes errors thrown during API operations and creates standardized error responses
+ * @template E The type of the error object
+ * @param {E} error The error object or message
+ * @param {Context} context The Hono context object
+ * @returns {Response} A JSON response with the error details and appropriate status code
+ */
+export function handleApiError<E = any>(error: E, context: Context) {
+	let errorResponse: ApiErrorResponse<E>;
+	let statusCode: StatusCode = 500;
+
+	// if api error, use the status code from the error
+	if (error instanceof ApiError) {
+		statusCode = error.statusCode;
+	}
+
+	if (error instanceof ApiError || error instanceof Error) {
+		errorResponse = generateApiErrorResponse(error, error.message);
+	} else {
+		errorResponse = generateApiErrorResponse(error);
+	}
+
+	return context.json(errorResponse, statusCode);
 }
