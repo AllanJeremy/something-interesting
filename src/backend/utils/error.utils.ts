@@ -1,9 +1,9 @@
-// This file contains custom error classes that extend the base Error class - we are not using HTTPException because we want to have more control over the error responses
+import { HTTPException } from 'hono/http-exception';
 import { StatusCode } from 'hono/utils/http-status';
 
-export class ApiError extends Error {
-	constructor(message: string, public statusCode: StatusCode = 500) {
-		super(message);
+export class ApiError extends HTTPException {
+	constructor(message: string, public status: StatusCode = 500) {
+		super(status, { message });
 	}
 }
 
