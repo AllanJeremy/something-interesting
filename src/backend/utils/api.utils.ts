@@ -54,9 +54,6 @@ export function handleApiSuccess<T>(context: Context, data: T, message?: string,
 	return context.json(apiResponse, statusCode);
 }
 
-// TODO: Get friendly error messages from Zod
-// TODO: Handle DB errors
-
 /**
  * Handles API errors and generates appropriate responses
  * @description This function processes errors thrown during API operations and creates standardized error responses

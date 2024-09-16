@@ -3,6 +3,7 @@ import { DatabaseConnection } from '../db';
 import { CreateUserData, User } from '../types';
 import { desc, eq, ilike } from 'drizzle-orm';
 import { calculateOffset } from '../utils/pagination.utils';
+import { ConflictError } from '../utils/error.utils';
 export class UserService {
 	//#region Constants
 	//* These values never change from instance to instance - so we make them static
@@ -25,9 +26,17 @@ export class UserService {
 	 * @returns {Promise<boolean>} A promise that resolves to `true` if the user exists, `false` otherwise
 	 */
 	public async userExists(userId: string): Promise<boolean> {
-		// TODO: Debug this -> currently fails with db error when record is not found
-		const userExists = await this.db.select().from(users).where(eq(users.id, userId)).limit(1);
+		const userExists = await this.db.select({ id: users.id }).from(users).where(eq(users.id, userId)).limit(1);
+		return userExists.length > 0;
+	}
 
+	private async _userWithUsernameExists(username: string): Promise<boolean> {
+		const userExists = await this.db.select({ username: users.username }).from(users).where(eq(users.username, username)).limit(1);
+		return userExists.length > 0;
+	}
+
+	private async _userWithEmailExists(email: string): Promise<boolean> {
+		const userExists = await this.db.select({ email: users.email }).from(users).where(eq(users.email, email)).limit(1);
 		return userExists.length > 0;
 	}
 
@@ -37,6 +46,23 @@ export class UserService {
 	 * @returns {Promise<User>} A promise that resolves to the created user
 	 */
 	public async createUser(createUserData: CreateUserData): Promise<User> {
+		const userWithUsernameExists = await this._userWithUsernameExists(createUserData.username);
+		const userWithEmailExists = await this._userWithEmailExists(createUserData.email);
+
+		if (userWithUsernameExists) {
+			throw new ConflictError(
+				`User with username '${createUserData.username}' already exists`,
+				'Attempted to create a user with a username that already exists. Please try a different username.'
+			);
+		}
+
+		if (userWithEmailExists) {
+			throw new ConflictError(
+				`User with email '${createUserData.email}' already exists`,
+				'Attempted to create a user with an email that already exists. Please try a different email.'
+			);
+		}
+
 		const createdUser = await this.db
 			.insert(users)
 			.values({
