@@ -1,7 +1,7 @@
 // relies on: error.utils.ts & types/ApiResponse.types.ts
 import { Context } from 'hono';
 import { ApiErrorResponse, ApiSuccessResponse } from '../types';
-import { ApiError } from './error.utils';
+import { ApiError, BadRequestError, getFriendlyZodErrorMessage } from './error.utils';
 import { StatusCode } from 'hono/utils/http-status';
 import { ZodError } from 'zod';
 
@@ -14,7 +14,7 @@ import { ZodError } from 'zod';
  * @returns {ApiErrorResponse<E>} A standardized API error response object
  */
 
-function _generateApiErrorResponse<E = unknown>(error: E, message?: string): ApiErrorResponse<E> {
+function _generateApiErrorResponse<E = any | ApiError | Error>(error: E, message?: string): ApiErrorResponse<E> {
 	return {
 		ok: false,
 		message: message ?? 'An error occurred',
@@ -71,17 +71,23 @@ export function handleApiError<E = any>(context: Context, error: E) {
 
 	console.error('[error]', error);
 
-	// if api error, use the status code from the error
-	if (error instanceof ApiError) {
-		statusCode = error.status;
-	} else if (error instanceof ZodError) {
-		statusCode = 400;
-		console.error('[zod error]', error.format());
-	}
+	// Make zod errors more user friendly
+	if (error instanceof ZodError) {
+		const friendlyZodErrorMessage = getFriendlyZodErrorMessage(error);
+		const friendlyZodError = new BadRequestError(friendlyZodErrorMessage);
 
-	if (error instanceof ApiError || error instanceof Error) {
+		// A zod error is usually an indication that the request was bad, so we use a 400 status code
+		statusCode = 400;
+		errorResponse = _generateApiErrorResponse<any>(friendlyZodError, friendlyZodErrorMessage);
+	}
+	//
+	else if (error instanceof ApiError || error instanceof Error) {
+		// if api error, use the status code from the error - otherwise, keep the original status cod
+		statusCode = error instanceof ApiError ? error.status : statusCode;
 		errorResponse = _generateApiErrorResponse(error, error.message);
-	} else {
+	}
+	//
+	else {
 		errorResponse = _generateApiErrorResponse(error);
 	}
 
