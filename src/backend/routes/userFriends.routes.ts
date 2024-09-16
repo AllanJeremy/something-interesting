@@ -31,12 +31,12 @@ app.get('/', validatePaginationQuery, async (c) => {
 	// Get query parameters with default values
 	const { search: validSearch, limit: validLimit, page: validPage } = c.req.valid('query');
 
-	const search = validSearch || null;
+	const searchQuery = validSearch || null;
 	const limit = parseInt(validLimit || String(FriendService.DEFAULT_FRIENDS_PER_PAGE));
 	const page = parseInt(validPage || '1');
 
 	try {
-		const friendList = await friendService.getUserFriendList(userId, search, limit, page);
+		const friendList = await friendService.getUserFriendList(userId, searchQuery, limit, page);
 
 		return handleApiSuccess(c, friendList, 'Friend list retrieved successfully');
 	} catch (error) {
