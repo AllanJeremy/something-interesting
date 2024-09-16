@@ -1,7 +1,9 @@
-import { users, userFriends, userFriendsRelations } from '../db/schema';
-import { createDbConnection, DatabaseConnection } from '../db';
-import { CreateUserData, CreateUserFriendData, User, UserFriendship } from '../types';
-import { and, or, desc, eq, ilike, SQL } from 'drizzle-orm';
+import { users } from '../db/schema';
+import { DatabaseConnection } from '../db';
+import { CreateUserData, User } from '../types';
+import { desc, eq, ilike } from 'drizzle-orm';
+import { calculateOffset } from '../utils/pagination.utils';
+import { ConflictError } from '../utils/error.utils';
 export class UserService {
 	//#region Constants
 	//* These values never change from instance to instance - so we make them static
@@ -24,9 +26,17 @@ export class UserService {
 	 * @returns {Promise<boolean>} A promise that resolves to `true` if the user exists, `false` otherwise
 	 */
 	public async userExists(userId: string): Promise<boolean> {
-		// TODO: Debug this -> currently fails with db error when record is not found
-		const userExists = await this.db.select().from(users).where(eq(users.id, userId)).limit(1);
+		const userExists = await this.db.select({ id: users.id }).from(users).where(eq(users.id, userId)).limit(1);
+		return userExists.length > 0;
+	}
 
+	private async _userWithUsernameExists(username: string): Promise<boolean> {
+		const userExists = await this.db.select({ username: users.username }).from(users).where(eq(users.username, username)).limit(1);
+		return userExists.length > 0;
+	}
+
+	private async _userWithEmailExists(email: string): Promise<boolean> {
+		const userExists = await this.db.select({ email: users.email }).from(users).where(eq(users.email, email)).limit(1);
 		return userExists.length > 0;
 	}
 
@@ -36,6 +46,23 @@ export class UserService {
 	 * @returns {Promise<User>} A promise that resolves to the created user
 	 */
 	public async createUser(createUserData: CreateUserData): Promise<User> {
+		const userWithUsernameExists = await this._userWithUsernameExists(createUserData.username);
+		const userWithEmailExists = await this._userWithEmailExists(createUserData.email);
+
+		if (userWithUsernameExists) {
+			throw new ConflictError(
+				`User with username '${createUserData.username}' already exists`,
+				'Attempted to create a user with a username that already exists. Please try a different username.'
+			);
+		}
+
+		if (userWithEmailExists) {
+			throw new ConflictError(
+				`User with email '${createUserData.email}' already exists`,
+				'Attempted to create a user with an email that already exists. Please try a different email.'
+			);
+		}
+
 		const createdUser = await this.db
 			.insert(users)
 			.values({
@@ -51,12 +78,14 @@ export class UserService {
 	 * Retrieves a list of users from the database
 	 * @param searchQuery An optional search query to filter users by username
 	 * @param limit The number of users to retrieve per page
-	 * @param offset The number of users to skip
+	 * @param page The page number for pagination (starting at 1)
 	 * @returns {Promise<User[]>} A promise that resolves to an array of User objects
 	 */
-	public async getAllUsers(searchQuery: string | null = null, limit = UserService.DEFAULT_USERS_PER_PAGE, offset = 0): Promise<User[]> {
+	public async getAllUsers(searchQuery: string | null = null, limit = UserService.DEFAULT_USERS_PER_PAGE, page = 1): Promise<User[]> {
 		// Only search by username while searching for users
 		const searchCondition = searchQuery ? ilike(users.username, `%${searchQuery.toLowerCase()}%`) : undefined;
+
+		const offset = calculateOffset(page, limit);
 
 		//? We could optimize this by fetching less columns here
 		const usersFound = await this.db.select().from(users).where(searchCondition).limit(limit).offset(offset).orderBy(desc(users.updatedAt));
