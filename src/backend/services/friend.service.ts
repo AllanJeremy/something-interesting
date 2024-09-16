@@ -1,7 +1,7 @@
-import { SQL, and, eq, or } from 'drizzle-orm';
+import { SQL, and, eq, desc, or } from 'drizzle-orm';
 import { DatabaseConnection } from '../db';
-import { userFriends } from '../db/schema';
-import { CreateUserFriendData, UserFriendship } from '../types';
+import { userFriends, userFriendsRelations, users } from '../db/schema';
+import { CreateUserFriendData, UserFriendship, UserFriendshipWithUser } from '../types';
 import { UserService } from './user.service';
 import { calculateOffset } from '../utils/pagination.utils';
 import { ConflictError, ForbiddenError, NotFoundError } from '../utils/error.utils';
@@ -222,24 +222,39 @@ export class FriendService {
 	 * Retrieves a list of user friendships for a given user
 	 * @description This function fetches all friendships where the user is either the initiator or the receiver
 	 * @param userId The id of the user to fetch friendships for
-	 * @param search The search query for filtering friends (optional)
+	 * @param searchQuery The search query for filtering friends (optional)
 	 * @param limit The maximum number of friendships to return (default: FriendService.DEFAULT_FRIENDS_PER_PAGE)
 	 * @param page The page number for pagination (starting at 1)
 	 * @returns {Promise<UserFriendship[]>} A promise that resolves to an array of UserFriendship objects
 	 */
 	public async getUserFriendList(
 		userId: string,
-		search: string | null = null,
+		searchQuery: string | null = null, // TODO: Implement this - will need to add initiator username & receiver username to the userFriends table
 		limit = FriendService.DEFAULT_FRIENDS_PER_PAGE,
 		page = 1
-	): Promise<UserFriendship[]> {
-		//TODO: Add search friends option
-
+	): Promise<UserFriendshipWithUser[]> {
 		// Get all friendships where the user is either the initiator or the receiver
 		const friendshipCondition = or(eq(userFriends.userId, userId), eq(userFriends.friendUserId, userId));
 
 		const offset = calculateOffset(page, limit);
-		const userFriendships = await this.db.select().from(userFriends).where(friendshipCondition).limit(limit).offset(offset);
+
+		const userFriendships = await this.db.query.userFriends.findMany({
+			where: friendshipCondition,
+			with: {
+				user: {
+					columns: {
+						username: true,
+					},
+				},
+				friend: {
+					columns: {
+						username: true,
+					},
+				},
+			},
+			limit: limit,
+			offset: offset,
+		});
 
 		return userFriendships;
 	}
