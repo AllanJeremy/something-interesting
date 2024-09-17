@@ -10,7 +10,9 @@ const Home: React.FC = () => {
 			try {
 				console.log('fetching users');
 				const response = await fetchApi<any>('/users');
-				setUsers(response);
+
+				const usersFromApi = response.data;
+				setUsers(usersFromApi);
 			} catch (err) {
 				setError(err instanceof Error ? err.message : 'An error occurred');
 			}
@@ -26,7 +28,7 @@ const Home: React.FC = () => {
 			<h2>Users:</h2>
 			<ul>
 				{users.map((user) => (
-					<li key={user.id}>{user.name}</li>
+					<li key={user.id}>{user.username}</li>
 				))}
 			</ul>
 		</div>
