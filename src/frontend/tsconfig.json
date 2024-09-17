@@ -1,7 +1,10 @@
 {
-	"include": ["../backend/types/*.ts"],
-	"references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+	"include": ["../backend/types/*.ts", "src"],
+
 	"compilerOptions": {
+		"baseUrl": ".",
+		"esModuleInterop": true,
+		"jsx": "react",
 		"paths": {
 			"@/*": ["./src/*"]
 		}
