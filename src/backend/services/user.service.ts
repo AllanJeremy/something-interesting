@@ -1,9 +1,10 @@
 import { users } from '../db/schema';
 import { DatabaseConnection } from '../db';
 import { CreateUserData, User } from '../types';
-import { desc, eq, ilike } from 'drizzle-orm';
+import { desc, eq, ilike, SQL, sql } from 'drizzle-orm';
 import { calculateOffset } from '../utils/pagination.utils';
 import { ConflictError } from '../utils/error.utils';
+
 export class UserService {
 	//#region Constants
 	//* These values never change from instance to instance - so we make them static
@@ -91,5 +92,70 @@ export class UserService {
 		const usersFound = await this.db.select().from(users).where(searchCondition).limit(limit).offset(offset).orderBy(desc(users.updatedAt));
 
 		return usersFound;
+	}
+
+	/**
+	 * Updates the friend count or pending friend count for specified users.
+	 * @param updateField - The field to update, either 'friendCount' or 'pendingFriendCount'.
+	 * @param operation - The operation to perform, either 'increment' or 'decrement'.
+	 * @param userIds - The IDs of the users to update.
+	 * @returns A promise that resolves when the update is complete.
+	 */
+	private async updateUserCounts(
+		updateField: 'friendCount' | 'pendingFriendCount',
+		operation: 'increment' | 'decrement',
+		...userIds: string[]
+	): Promise<void> {
+		console.log('userIds', userIds);
+		let setValue: SQL<unknown>;
+
+		if (operation === 'increment') {
+			setValue = sql`${users[updateField]} + 1`;
+		} else {
+			setValue = sql`GREATEST(${users[updateField]} - 1, 0)`;
+		}
+
+		await this.db
+			.update(users)
+			.set({ [updateField]: setValue })
+			// Update records for all of the userIds passed in as arguments
+			.where(sql`${users.id} = ANY(${sql.raw(`ARRAY[${userIds.map((id) => `'${id}'`).join(', ')}]::uuid[]`)})`)
+			.execute();
+	}
+
+	/**
+	 * Increments the friend count for specified users.
+	 * @param userIds - The IDs of the users whose friend count should be incremented.
+	 * @returns A promise that resolves when the increment is complete.
+	 */
+	public async incrementFriendCount(...userIds: string[]): Promise<void> {
+		await this.updateUserCounts('friendCount', 'increment', ...userIds);
+	}
+
+	/**
+	 * Decrements the friend count for specified users.
+	 * @param userIds - The IDs of the users whose friend count should be decremented.
+	 * @returns A promise that resolves when the decrement is complete.
+	 */
+	public async decrementFriendCount(...userIds: string[]): Promise<void> {
+		await this.updateUserCounts('friendCount', 'decrement', ...userIds);
+	}
+
+	/**
+	 * Increments the pending friend count for specified users.
+	 * @param userIds - The IDs of the users whose pending friend count should be incremented.
+	 * @returns A promise that resolves when the increment is complete.
+	 */
+	public async incrementPendingFriendCount(...userIds: string[]): Promise<void> {
+		await this.updateUserCounts('pendingFriendCount', 'increment', ...userIds);
+	}
+
+	/**
+	 * Decrements the pending friend count for specified users.
+	 * @param userIds - The IDs of the users whose pending friend count should be decremented.
+	 * @returns A promise that resolves when the decrement is complete.
+	 */
+	public async decrementPendingFriendCount(...userIds: string[]): Promise<void> {
+		await this.updateUserCounts('pendingFriendCount', 'decrement', ...userIds);
 	}
 }
