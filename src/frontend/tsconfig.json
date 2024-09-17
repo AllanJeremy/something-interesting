@@ -1,5 +1,5 @@
 {
-	"include": ["../shared/*"],
+	"include": ["../backend/types/*.ts"],
 	"references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
 	"compilerOptions": {
 		"paths": {
