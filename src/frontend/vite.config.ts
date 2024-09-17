@@ -8,7 +8,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-				target: 'https://doge.allanjeremy.com',
+				target: 'https://api.aj-doge.workers.dev',
 				changeOrigin: true,
 			},
 		},

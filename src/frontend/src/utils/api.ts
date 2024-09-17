@@ -1,7 +1,7 @@
 //TODO: Get this type
 type Api = any;
 
-const API_BASE_URL = 'https://doge.allanjeremy.com';
+const API_BASE_URL = 'https://api.aj-doge.workers.dev';
 
 export async function fetchApi<T extends keyof Api>(path: string, init?: RequestInit): Promise<ReturnType<Api[T]>> {
 	const defaultInit: RequestInit = {
