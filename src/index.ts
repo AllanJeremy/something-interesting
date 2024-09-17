@@ -17,6 +17,6 @@ app.use(
 	})
 );
 
-app.route('/api', backendRoutes);
+app.route('/', backendRoutes);
 
 export default app;
