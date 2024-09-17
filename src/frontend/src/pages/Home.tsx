@@ -8,6 +8,7 @@ const Home: React.FC = () => {
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
+				console.log('fetching users');
 				const response = await fetchApi<any>('/users');
 				setUsers(response);
 			} catch (err) {
