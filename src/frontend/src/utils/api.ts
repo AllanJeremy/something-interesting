@@ -3,7 +3,7 @@ type Api = any;
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787/api';
 
-export async function fetchApi<T extends keyof Api>(path: T, init?: RequestInit): Promise<ReturnType<Api[T]>> {
+export async function fetchApi<T extends keyof Api>(path: string, init?: RequestInit): Promise<ReturnType<Api[T]>> {
 	const defaultInit: RequestInit = {
 		credentials: 'include', // This allows sending cookies if needed
 		headers: {
