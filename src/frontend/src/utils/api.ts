@@ -1,7 +1,7 @@
 //TODO: Get this type
 type Api = any;
-console.log('api woot');
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://doge.allanjeremy.com';
+
+const API_BASE_URL = 'https://doge.allanjeremy.com';
 
 export async function fetchApi<T extends keyof Api>(path: string, init?: RequestInit): Promise<ReturnType<Api[T]>> {
 	const defaultInit: RequestInit = {
