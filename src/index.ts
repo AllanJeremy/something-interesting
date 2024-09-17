@@ -8,7 +8,7 @@ app.use(
 	'*',
 	// TODO: Get live URL from env
 	cors({
-		origin: ['http://localhost:5173', 'https://your-production-frontend-url.com'],
+		origin: ['*'], // TODO: Change to production URL
 		allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 		allowHeaders: ['Content-Type', 'Authorization'],
 		exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
