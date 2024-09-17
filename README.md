@@ -35,6 +35,8 @@ cd aj-doge-labs
 
 ## Installing dependencies
 
+> TODO: Add instructions for frontend vs backend
+
 For this project, we are using [bun](https://bun.sh/) for running the project and managing dependencies.
 
 If you haven't already set it up on your machine, then please follow the instructions on the [bun website](https://bun.sh/).
