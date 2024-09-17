@@ -119,6 +119,7 @@ With great power, comes some compromise, or whatever Uncle Ben from spiderman sa
 Anyway, here are some assumptions I made while creating these APIs:
 
 1. The database should be able to handle 10M users (BigBallerz currently has 2M users)
+2. Reads are more frequent than writes - we make additional queries when adding new friends to cache the number of friends/pending friend requests a user has
 
 ---
 
@@ -160,3 +161,5 @@ Based on how we have structured the project, here are a few potential areas of i
 - In retrospect, I could have waited until I was done to generate the single migration needed to run when you setup the project. However, creating multiple migrations is also indicative of how real-world use occurs, so ><
 
 9. Add friendlier error message responses from db instead of forwarding db error as response (for example: when creating duplicate records)
+
+10. Use transactions in write queries for atomic queries (eg. if we fail to increment friend count, don't decrement pending friend count)

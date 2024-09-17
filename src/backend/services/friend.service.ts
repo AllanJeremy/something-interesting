@@ -127,17 +127,20 @@ export class FriendService {
 			.prepare('create_friend_request')
 			.execute();
 
+		// Increment pending friend count for the friend
+		await this.userService.incrementPendingFriendCount(userId, friendUserId);
+
 		return createdFriendRequest[0];
 	}
 
 	/**
 	 * Confirms a friend request between two users
-	 * @param userId The id of the user initiating the friend request
+	 * @param receiverUserId The id of the user confirming the friend request (the receiver of the friend request)
 	 * @param friendshipId The id of the friendship to be confirmed
 	 * @returns {Promise<UserFriendship>} A promise that resolves to the friend request that was confirmed
 	 */
-	public async confirmFriendRequest(userId: string, friendshipId: string): Promise<UserFriendship> {
-		const userExists = await this.userService.userExists(userId);
+	public async confirmFriendRequest(receiverUserId: string, friendshipId: string): Promise<UserFriendship> {
+		const userExists = await this.userService.userExists(receiverUserId);
 
 		if (!userExists) {
 			throw new NotFoundError('User does not exist');
@@ -145,7 +148,7 @@ export class FriendService {
 
 		// Specifically get the friend request received by the user
 		// This ensures that only the recipient of the friend request can confirm it
-		const friendshipCondition = and(eq(userFriends.id, friendshipId), eq(userFriends.friendUserId, userId));
+		const friendshipCondition = and(eq(userFriends.id, friendshipId), eq(userFriends.friendUserId, receiverUserId));
 
 		const existingFriendshipRequestResult = await this.db
 			.select()
@@ -174,12 +177,19 @@ export class FriendService {
 			.prepare('confirm_friend_request')
 			.execute();
 
+		// Increment friend count and decrement pending friend count for both users
+		// TODO: Use transactions to ensure both increments and decrements are atomic
+		await Promise.all([
+			this.userService.incrementFriendCount(receiverUserId, existingFriendshipRequest.userId),
+			this.userService.decrementPendingFriendCount(receiverUserId, existingFriendshipRequest.userId),
+		]);
+
 		return updatedUserFriendshipResponse[0];
 	}
 
 	/**
 	 * Removes a friend request between two users
-	 * @param userId The id of the user that initiated the friend request
+	 * @param userId The id of the user that would like to remove the friend
 	 * @param friendshipId The id of the friendship to be removed
 	 * @returns {Promise<UserFriendship>} A promise that resolves to the friend request that was removed
 	 */
@@ -199,7 +209,7 @@ export class FriendService {
 
 		// Check if the friendship exists
 		if (existingFriendshipResult.length === 0) {
-			throw new NotFoundError('Friendship does not exist'); // TODO: Return NotFoundError
+			throw new NotFoundError('Friendship does not exist');
 		}
 
 		const existingFriendship = existingFriendshipResult[0];
@@ -214,6 +224,13 @@ export class FriendService {
 			.returning()
 			.prepare('remove_friend')
 			.execute();
+
+		// Decrement friend count or pending friend count based on the friendship status
+		if (existingFriendship.isConfirmed) {
+			await this.userService.decrementFriendCount(existingFriendship.userId, existingFriendship.friendUserId);
+		} else {
+			await this.userService.decrementPendingFriendCount(existingFriendship.userId, existingFriendship.friendUserId);
+		}
 
 		return deletedUserFriendship[0];
 	}
