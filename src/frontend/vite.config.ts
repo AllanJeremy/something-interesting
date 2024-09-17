@@ -10,4 +10,12 @@ export default defineConfig({
 			'@backend': path.resolve(__dirname, '../backend'),
 		},
 	},
+	server: {
+		proxy: {
+			'/api': {
+				target: 'https://doge.allanjeremy.com',
+				changeOrigin: true,
+			},
+		},
+	},
 });
