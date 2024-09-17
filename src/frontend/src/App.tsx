@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import './App.css';
 
 function App() {
@@ -19,7 +18,8 @@ function App() {
 			<h1>User List</h1>
 			<ul>
 				{users.map((user) => (
-					<li key={user.id}>{user.username}</li>
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					<li key={(user as any).id}>{(user as any).username}</li>
 				))}
 			</ul>
 			<div className="card">
