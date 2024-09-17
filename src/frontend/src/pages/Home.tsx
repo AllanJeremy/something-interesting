@@ -23,7 +23,7 @@ const Home: React.FC = () => {
 
 	return (
 		<div>
-			<h1>Homepage</h1>
+			<h1 className="text-3xl">Homepage</h1>
 			{error && <p>Error: {error}</p>}
 			<h2>Users:</h2>
 			<ul>
