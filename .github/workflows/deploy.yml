@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - fix/failing-cloudflare-workers-deploy
 
 jobs:
   deploy:
@@ -21,10 +22,13 @@ jobs:
         run: cd server
 
       - name: Install dependencies
-        run: bun install
+        run: cd server && bun install
 
       - name: Run tests
-        run: bun run test
+        run: cd server && bun run test
+
+      - name: Print working directory
+        run: pwd
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
