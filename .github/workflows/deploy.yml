@@ -17,6 +17,9 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Cd into the server
+        run: cd server
+
       - name: Install dependencies
         run: bun install
 

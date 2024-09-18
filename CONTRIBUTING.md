@@ -1,3 +1,7 @@
+## Welcome
+
+Glad you're interested in contributing. This document should help you get up to speed
+
 ## Friend Request System: Initiator and Receiver
 
 In our friend request system, we use the concepts of **initiator** and **receiver** to manage the friendship process. This approach helps maintain clarity and control over the friend request lifecycle.
@@ -69,13 +73,13 @@ When handling errors in this project, we prefer using the custom error classes d
 Example usage:
 
 ```ts
-import { BadRequestError } from './utils/error.utils.ts';
+import { BadRequestError } from "./utils/error.utils.ts";
 
 // Whenever you need to throw an error
 //... rest of code
 if (infoIsIncomplete) {
 	// this is an example condition that might lead to an error
-	const errorMessage = 'The following fields are missing: A, B, C';
+	const errorMessage = "The following fields are missing: A, B, C";
 
 	throw new BadRequestError(errorMessage);
 }
@@ -85,6 +89,6 @@ if (infoIsIncomplete) {
 
 This doc is incomplete and may be missing some details on architecture and patterns.
 
-![Retreating Doge](memes/retreating-doge.gif)
+![Retreating Doge](_memes/retreating-doge.gif)
 
 Thanks for checking out this page though 😁!
