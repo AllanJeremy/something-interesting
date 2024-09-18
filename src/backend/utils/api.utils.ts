@@ -1,6 +1,6 @@
 // relies on: error.utils.ts & types/ApiResponse.types.ts
 import { Context } from 'hono';
-import { ApiErrorResponse, ApiSuccessResponse } from '../types';
+import { ApiErrorResponse, ApiSuccessResponse } from '../types'; // TODO: Use aliases
 import { ApiError, BadRequestError, getFriendlyZodErrorMessage } from './error.utils';
 import { StatusCode } from 'hono/utils/http-status';
 import { ZodError } from 'zod';

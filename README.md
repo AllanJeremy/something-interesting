@@ -35,6 +35,8 @@ cd aj-doge-labs
 
 ## Installing dependencies
 
+> TODO: Add instructions for frontend vs backend
+
 For this project, we are using [bun](https://bun.sh/) for running the project and managing dependencies.
 
 If you haven't already set it up on your machine, then please follow the instructions on the [bun website](https://bun.sh/).
@@ -129,25 +131,27 @@ Anyway, here are some assumptions I made while creating these APIs:
 
 Based on how we have structured the project, here are a few potential areas of improvement (in no particular order):
 
-1. **Add authentication & authorization to API routes**
+1. **Add user friend search** - This would potentially need having the username be part of the `user_friends` table to be efficient (so we don't have to search through joined tables)
+
+2. **Add authentication & authorization to API routes**
 
 - Control who has access to what endpoints
 
-2. **Caching:** Further reduce the load on the database by potentially using an in-memory cache to access frequently accessed records
+3. **Caching:** Further reduce the load on the database by potentially using an in-memory cache to access frequently accessed records
 
 - This would work particularly well when fetching user/friend information for popular creators, which would be lots of duplicate requests being made to fetch the same thing.
 
-3. **Track friend request metrics** (sent, received, pending) on the home page.
+4. **Track friend request metrics** (sent, received, pending) on the home page.
 
 - This can help us derive insight on what players tend to initiate social interactions (which can serve as a growth engine for what type of players to target when marketing / retargeting ads).
 
-4. **Add typesafety to `.env` by using zod to validate whether or not our environment variables are correctly setup.**
+5. **Add typesafety to `.env` by using zod to validate whether or not our environment variables are correctly setup.**
 
-5. **Rate limiting:** limit how many requests a user can make over a period of time eg. per minute (prevent spam & ddos)
+6. **Rate limiting:** limit how many requests a user can make over a period of time eg. per minute (prevent spam & ddos)
 
-6. **Database backups & replication:** snapshots of the database that can be used incase one database instance goes down.
+7. **Database backups & replication:** snapshots of the database that can be used incase one database instance goes down.
 
-7. **Add a contribution guide**
+8. **Add a contribution guide**
 
 - This would reside in [CONTRIBUTION.md](CONTRIBUTION.md) and would contain
   - Code style guides: so the codebase remains consistent
@@ -155,11 +159,11 @@ Based on how we have structured the project, here are a few potential areas of i
   - How to add/modify stuff
   - Pull request process & rules etc.
 
-8. Combine initial migrations into one migration file
+9. Combine initial migrations into one migration file
 
 - Since I was iterating in dev, there were a few database changes that were made in the early stages.
 - In retrospect, I could have waited until I was done to generate the single migration needed to run when you setup the project. However, creating multiple migrations is also indicative of how real-world use occurs, so ><
 
-9. Add friendlier error message responses from db instead of forwarding db error as response (for example: when creating duplicate records)
+10. Add friendlier error message responses from db instead of forwarding db error as response (for example: when creating duplicate records)
 
-10. Use transactions in write queries for atomic queries (eg. if we fail to increment friend count, don't decrement pending friend count)
+11. Use transactions in write queries for atomic queries (eg. if we fail to increment friend count, don't decrement pending friend count)

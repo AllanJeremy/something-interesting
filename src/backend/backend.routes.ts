@@ -10,8 +10,8 @@ import userFriendsRoutes from './routes/userFriends.routes';
 //#region Service imports
 import { UserService } from './services/user.service';
 import { FriendService } from './services/friend.service';
-import { handleApiError } from './utils/api.utils';
-import { InternalServerError } from './utils/error.utils';
+import { handleApiError, handleApiSuccess } from './utils/api.utils';
+import { InternalServerError, NotFoundError } from './utils/error.utils';
 //#endregion Service imports
 
 export type Env = {
@@ -72,11 +72,27 @@ app.use('/users/:userId/*', async (c, next) => {
 //#endregion Middleware
 
 //#region Routes
+app.get('/', (c) => {
+	return handleApiSuccess(
+		c,
+		{
+			meme: 'This is a Doge meme easter egg for anyone accessing the root. What a discovery!',
+		},
+		'Much API, very root. Wow!'
+	);
+});
+
 app.route('/users', userRoutes);
 app.route('/users/:userId/friends', userFriendsRoutes);
 //#endregion Routes
 
 //#region Error handling
+// Handle 404 Not Found for API routes
+
+app.notFound((c) => {
+	return handleApiError(c, new NotFoundError('The requested API endpoint does not exist.', `${c.req.path} isn't handled yet`));
+});
+
 app.onError((error, c) => {
 	return handleApiError(c, new InternalServerError(error.message));
 });
