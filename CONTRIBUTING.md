@@ -1,3 +1,7 @@
+![Doge-o logo banner](_memes/doge-o-logo-banner.png)
+
+> _Came up with the name while on a walk and it stuck 😅. So I made a quick logo with Dalle and Figma 🖌️._
+
 ## Welcome
 
 Glad you're interested in contributing. This document should help you get up to speed
