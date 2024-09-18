@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { Env, Vars } from '../backend.routes';
+import { Env, Vars } from '../api.routes';
 import { handleApiSuccess, handleApiError } from '../utils/api.utils';
 import { FriendService } from '../services/friend.service';
 import { BadRequestError } from '../utils/error.utils';

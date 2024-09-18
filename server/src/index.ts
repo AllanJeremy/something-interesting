@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import backendRoutes from './backend.routes';
+import apiRoutes from './api.routes';
 import { cors } from 'hono/cors';
 
 const app = new Hono<{ Bindings: Env }>();
@@ -17,6 +17,6 @@ app.use(
 	})
 );
 
-app.route('/', backendRoutes);
+app.route('/', apiRoutes);
 
 export default app;
