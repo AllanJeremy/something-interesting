@@ -1,23 +1,19 @@
+import { getRequest } from "@/utils/api";
 import { UserAndFriendshipStats } from "@server/types";
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+// import { useState } from "react";
 
 export const useStats = () => {
-	//
-	const [stats, _setStats] = useState<UserAndFriendshipStats>({
-		users: {
-			total: 10, //TODO: Get these from the endpoint
-		},
-		friendships: {
-			total: 50, //TODO: Get these from the endpoint
-		},
-	});
-	const [statsAreLoading, _setStatsAreLoading] = useState(true);
+	async function loadStats() {
+		const { data: stats } = await getRequest<UserAndFriendshipStats>("stats");
 
-	function loadStats() {
-		// TODO: add implementation
-		_setStats(stats);
-		_setStatsAreLoading(false);
+		return stats;
 	}
 
-	return { loadStats, stats, statsAreLoading };
+	const result = useQuery({
+		queryKey: ["stats"],
+		queryFn: loadStats,
+	});
+
+	return result;
 };
