@@ -17,8 +17,6 @@ app.use(
 	})
 );
 
-const apiEndpoints = app.route('/', apiRoutes);
-
-export type ApiEndpoints = typeof apiEndpoints;
+app.route('/', apiRoutes);
 
 export default app;
