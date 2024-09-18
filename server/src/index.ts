@@ -8,7 +8,7 @@ app.use(
 	'*',
 	// TODO: Get live URL from env
 	cors({
-		origin: ['https://doge.allanjeremy.com'],
+		origin: ['http://localhost:5173', 'https://doge.allanjeremy.com'],
 		allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 		allowHeaders: ['Content-Type', 'Authorization'],
 		exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
