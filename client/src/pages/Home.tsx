@@ -1,6 +1,6 @@
 import React from "react";
 import Meteors from "@/components/magicui/meteors";
-import StatsCard from "@/components/StatsCard";
+import StatsContainer from "@/components/StatsContainer";
 import ApiCard from "@/components/UsersCard";
 
 const Home: React.FC = () => {
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
 					</p>
 				</section>
 
-				<StatsCard />
+				<StatsContainer />
 
 				<section className="text-center mb-12">
 					<h1 className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-400/80 bg-clip-text text-6xl font-bold leading-none text-transparent dark:from-white dark:to-slate-900/10">
