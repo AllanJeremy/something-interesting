@@ -12,7 +12,10 @@ const StatsLoadingSkeleton = () => {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 			{[...Array(3)].map((_, i) => (
-				<Skeleton key={`stat-skeleton-${i}`} className={STATS_HEIGHT_CLASS} />
+				<Skeleton
+					key={`stat-skeleton-${i}`}
+					className={`${STATS_HEIGHT_CLASS} rounded-xl`}
+				/>
 			))}
 		</div>
 	);
@@ -20,14 +23,14 @@ const StatsLoadingSkeleton = () => {
 
 const StatCard = ({ title, value }: { title: string; value: number }) => {
 	return (
-		<Card className="h-48">
+		<Card className="h-48 shadow-none text-center flex flex-col justify-center">
 			<CardHeader>
-				<CardTitle className="text-4xl font-bold">
+				<CardTitle className="text-7xl font-bold">
 					<NumberTicker value={value} />
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<p className="text-xl">{title}</p>
+				<p className="text">{title}</p>
 			</CardContent>
 		</Card>
 	);
