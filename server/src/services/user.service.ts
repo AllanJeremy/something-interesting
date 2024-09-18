@@ -1,6 +1,6 @@
 import { users } from '../db/schema';
 import { DatabaseConnection } from '../db';
-import { CreateUserData, User } from '../types';
+import { CreateUserData, User, UserStats } from '../types';
 import { desc, eq, ilike, SQL, sql } from 'drizzle-orm';
 import { calculateOffset } from '../utils/pagination.utils';
 import { ConflictError } from '../utils/error.utils';
@@ -157,5 +157,20 @@ export class UserService {
 	 */
 	public async decrementPendingFriendCount(...userIds: string[]): Promise<void> {
 		await this.updateUserCounts('pendingFriendCount', 'decrement', ...userIds);
+	}
+
+	/**
+	 * Get user stats
+	 */
+	public async getUserStats(): Promise<UserStats> {
+		const totalUsersResponse = await this.db
+			.select({ totalUsers: sql<string>`COUNT(id)` }) // sql will return numbers as strings by default
+			.from(users)
+			.prepare('count_total_users')
+			.execute();
+
+		const totalUsersFromResponse = totalUsersResponse[0].totalUsers || '0';
+
+		return { total: parseInt(totalUsersFromResponse) };
 	}
 }

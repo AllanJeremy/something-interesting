@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { Env, Vars } from '../api.routes';
 import { handleApiError, handleApiSuccess } from '../utils/api.utils';
-import { CreateUserData, User } from '../types';
+import { User } from '../types';
 import { UserService } from '../services/user.service';
 import { validateCreateUser } from '../middleware/user.middleware';
 import { validatePaginationQuery } from '../middleware/pagination.middleware';
