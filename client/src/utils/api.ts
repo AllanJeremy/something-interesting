@@ -1,15 +1,15 @@
-import { ApiResponse } from "@server/types";
+import { ApiSuccessResponse } from "@server/types";
 
 const API_BASE_URL = "https://api.aj-doge.workers.dev";
 
 async function _fetchApi<T>(
 	path: string,
 	init?: RequestInit
-): Promise<ApiResponse<T>> {
+): Promise<ApiSuccessResponse<T>> {
 	const url = `${API_BASE_URL}/${path}`;
 
 	const response = await fetch(url, init);
-	const apiResponse = (await response.json()) as ApiResponse<T>;
+	const apiResponse = (await response.json()) as ApiSuccessResponse<T>;
 
 	return apiResponse;
 }
