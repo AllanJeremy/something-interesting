@@ -1,12 +1,17 @@
-## Introduction
+## Overview
 
-The project can be accessed via [doge.allanjeremy.com](https://doge.allanjeremy.com)
+Your task is to create a simple yet functional Friends List system. The system should allow users to manage a list of friends through a set of API endpoints (bonus: provide a small React-based home page displaying basic statistics about the users and their friends).
 
-This project includes 3 things
+This project includes 3 things:
 
-1. A ReactJS based homepage accessible via the root URL `/` with friend stats
-2. Standardized API endpoints for `users` and `friends` accessible via `/api/*`
-3. CI/CD & automatic testing & deploys through GitHub
+1. A ReactJS based frontend with friend stats, located in the `client/` directory
+2. Backend with standardized API endpoints for `users` and `friends`, located in the `/server` directory
+3. CI/CD & automatic testing & deploys through GitHub, located in the `.github` directory
+
+### Accessing the project
+
+- The client side (frontend) of this application is hosted on Cloudflare Pages & can be accessed via [doge.allanjeremy.com](https://doge.allanjeremy.com).
+- The APIs are hosted on Cloudflare Workers & can be accessed via [https://api.aj-doge.workers.dev](https://api.aj-doge.workers.dev/).
 
 ### Tech Stack
 
@@ -20,7 +25,7 @@ This project includes 3 things
 
 ---
 
-## Cloning the repository
+## Setting up the project
 
 ```sh
 # clone with ssh
@@ -116,7 +121,7 @@ Checkout the [cloudflare workers documentation](https://developers.cloudflare.co
 
 With great power, comes some compromise, or whatever Uncle Ben from spiderman said.
 
-![Cat Typing](memes/cat-typing.gif)
+![Cat Typing](_memes/cat-typing.gif)
 
 Anyway, here are some assumptions I made while creating these APIs:
 
@@ -127,7 +132,7 @@ Anyway, here are some assumptions I made while creating these APIs:
 
 ## Areas of Improvement
 
-![SpongeBob and Patrick thinking deeply](memes/spongebob-and-patrick-thinking.gif)
+![SpongeBob and Patrick thinking deeply](_memes/spongebob-and-patrick-thinking.gif)
 
 Based on how we have structured the project, here are a few potential areas of improvement (in no particular order):
 
