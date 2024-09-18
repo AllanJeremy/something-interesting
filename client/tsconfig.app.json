@@ -18,7 +18,19 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 
-		"composite": true
+		"composite": true,
+		"paths": {
+			"@/*": ["./src/*"],
+			"@server/endpoints": ["../server/src/index.ts"],
+			"@server/types": ["../server/src/types/index.ts"]
+		}
 	},
-	"include": ["src"]
+	"include": [
+		// Client related
+		"src",
+
+		// Server related
+		"../server/src/types/index.ts",
+		"../server/src/index.ts"
+	]
 }
