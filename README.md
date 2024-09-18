@@ -160,13 +160,10 @@ Based on how we have structured the project, here are a few potential areas of i
 
 7. **Database backups & replication:** snapshots of the database that can be used incase one database instance goes down.
 
-8. **Add a contribution guide**
+8. **Use RPC for backend-frontend communication**
 
-- This would reside in [CONTRIBUTION.md](CONTRIBUTION.md) and would contain
-  - Code style guides: so the codebase remains consistent
-  - Architectural decisions
-  - How to add/modify stuff
-  - Pull request process & rules etc.
+- This would mean that our backend is the only source of truth - leading to typesafe endpoints.
+- We currently still get types from the server, but the return types for different API requests are manually set on the frontend (this was the fastest short-term solution, given we aren't using a Hono project for our client side [and we might have different client types in future])
 
 9. Combine initial migrations into one migration file
 
