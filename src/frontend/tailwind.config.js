@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ['class'],
-    content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+	darkMode: ['class'],
+	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
     	extend: {
     		borderRadius: {
@@ -50,8 +50,59 @@ export default {
     				'4': 'hsl(var(--chart-4))',
     				'5': 'hsl(var(--chart-5))'
     			}
+    		},
+    		animation: {
+    			meteor: 'meteor 5s linear infinite',
+    			grid: 'grid 15s linear infinite',
+    			'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
+    			'accordion-down': 'accordion-down 0.2s ease-out',
+    			'accordion-up': 'accordion-up 0.2s ease-out'
+    		},
+    		keyframes: {
+    			meteor: {
+    				'0%': {
+    					transform: 'rotate(215deg) translateX(0)',
+    					opacity: '1'
+    				},
+    				'70%': {
+    					opacity: '1'
+    				},
+    				'100%': {
+    					transform: 'rotate(215deg) translateX(-500px)',
+    					opacity: '0'
+    				}
+    			},
+    			grid: {
+    				'0%': {
+    					transform: 'translateY(-50%)'
+    				},
+    				'100%': {
+    					transform: 'translateY(0)'
+    				}
+    			},
+    			'border-beam': {
+    				'100%': {
+    					'offset-distance': '100%'
+    				}
+    			},
+    			'accordion-down': {
+    				from: {
+    					height: '0'
+    				},
+    				to: {
+    					height: 'var(--radix-accordion-content-height)'
+    				}
+    			},
+    			'accordion-up': {
+    				from: {
+    					height: 'var(--radix-accordion-content-height)'
+    				},
+    				to: {
+    					height: '0'
+    				}
+    			}
     		}
     	}
     },
-	plugins: [require("tailwindcss-animate")],
+	plugins: [require('tailwindcss-animate')],
 };
