@@ -18,14 +18,13 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Cd into the server
-        run: cd server
-
       - name: Install dependencies
-        run: cd server && bun install
+        working-directory: ./server
+        run: bun install
 
       - name: Run tests
-        run: cd server && bun run test
+        working-directory: ./server
+        run: bun run test
 
       - name: Print working directory
         run: pwd
@@ -34,4 +33,5 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: server
           packageManager: bun
