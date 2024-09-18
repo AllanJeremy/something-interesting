@@ -82,6 +82,10 @@ app.get('/', (c) => {
 	);
 });
 
+app.get('/stats', (c) => {
+	return handleApiSuccess(c, { comingSoon: true });
+});
+
 app.route('/users', userRoutes);
 app.route('/users/:userId/friends', userFriendsRoutes);
 //#endregion Routes
