@@ -1,3 +1,7 @@
+## Welcome
+
+Glad you're interested in contributing. This document should help you get up to speed
+
 ## Friend Request System: Initiator and Receiver
 
 In our friend request system, we use the concepts of **initiator** and **receiver** to manage the friendship process. This approach helps maintain clarity and control over the friend request lifecycle.
