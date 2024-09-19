@@ -1,7 +1,6 @@
 import { getRequest } from "@/utils/api";
 import { UserAndFriendshipStats } from "@server/types";
 import { useQuery } from "@tanstack/react-query";
-// import { useState } from "react";
 
 export const useStats = () => {
 	async function loadStats() {
@@ -10,10 +9,10 @@ export const useStats = () => {
 		return stats;
 	}
 
-	const result = useQuery({
+	const statsQuery = useQuery({
 		queryKey: ["stats"],
 		queryFn: loadStats,
 	});
 
-	return result;
+	return { statsQuery };
 };

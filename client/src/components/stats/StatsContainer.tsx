@@ -21,6 +21,7 @@ const STATS_GAP_CLASS = "gap-6";
 
 //#region Stats Container
 function StatsContainer() {
+	const { statsQuery } = useStats();
 	const {
 		data: stats,
 		isLoading: statsAreLoading,
@@ -28,7 +29,7 @@ function StatsContainer() {
 		error,
 		isPending: statsArePending,
 		isSuccess: statsSuccessfullyLoaded,
-	} = useStats();
+	} = statsQuery;
 
 	const [userStatsDialogIsOpen, _setUserStatsDialogIsOpen] = useState(false);
 	const [friendshipStatsDialogIsOpen, _setFriendshipStatsDialogIsOpen] =
