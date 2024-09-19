@@ -1,12 +1,14 @@
 import { getRequest, postRequest } from "@/utils/api";
 import { CreateUserData, User } from "@server/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useUser = (
 	onCreateSuccess?: (userCreated: User) => void,
 	onCreateError?: (error: Error) => void
 ) => {
+	const queryClient = useQueryClient();
+
 	//#region API requests
 	/** Makes the API request to create the user */
 	async function _createUser(createUserData: CreateUserData): Promise<User> {
@@ -67,6 +69,11 @@ export const useUser = (
 			}
 		},
 		onSuccess: (userCreated) => {
+			// Invalidate relevant queries to refetch data since we have updated it
+			queryClient.invalidateQueries({ queryKey: ["users"] });
+			queryClient.invalidateQueries({ queryKey: ["stats"] });
+
+			// Let the user know
 			toast.success(
 				`User @${userCreated.username} created (${userCreated.email})`
 			);
