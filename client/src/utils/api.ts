@@ -1,26 +1,31 @@
-//TODO: Get this type
-type Api = any;
+import { ApiSuccessResponse } from "@server/types";
 
-const API_BASE_URL = 'https://api.aj-doge.workers.dev';
+const API_BASE_URL = "https://api.aj-doge.workers.dev";
 
-export async function fetchApi<T extends keyof Api>(path: string, init?: RequestInit): Promise<ReturnType<Api[T]>> {
-	const defaultInit: RequestInit = {
-		credentials: 'include', // This allows sending cookies if needed
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
+async function _fetchApi<T>(
+	path: string,
+	init?: RequestInit
+): Promise<ApiSuccessResponse<T>> {
+	const url = `${API_BASE_URL}/${path}`;
 
-	const mergedInit = { ...defaultInit, ...init };
+	const response = await fetch(url, init);
+	const apiResponse = (await response.json()) as ApiSuccessResponse<T>;
 
-	try {
-		const response = await fetch(`${API_BASE_URL}${path}`, mergedInit);
-		if (!response.ok) {
-			throw new Error(`API call failed: ${response.statusText}`);
-		}
-		return response.json();
-	} catch (error) {
-		console.error('API call error:', error);
-		throw error;
-	}
+	return apiResponse;
+}
+
+export function getRequest<T = unknown>(path: string, init?: RequestInit) {
+	return _fetchApi<T>(path, { ...init, method: "GET" });
+}
+
+export function postRequest<T = unknown>(path: string, init?: RequestInit) {
+	return _fetchApi<T>(path, { ...init, method: "POST" });
+}
+
+export function patchRequest<T = unknown>(path: string, init?: RequestInit) {
+	return _fetchApi<T>(path, { ...init, method: "PATCH" });
+}
+
+export function deleteRequest<T = unknown>(path: string, init?: RequestInit) {
+	return _fetchApi<T>(path, { ...init, method: "PATCH" });
 }

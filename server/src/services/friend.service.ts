@@ -1,7 +1,7 @@
-import { SQL, and, eq, desc, or } from 'drizzle-orm';
+import { SQL, and, eq, desc, or, sql } from 'drizzle-orm';
 import { DatabaseConnection } from '../db';
 import { userFriends, userFriendsRelations, users } from '../db/schema';
-import { CreateUserFriendData, UserFriendship, UserFriendshipWithUser } from '../types';
+import { CreateUserFriendData, UserFriendship, UserFriendshipStats, UserFriendshipWithUser } from '../types';
 import { UserService } from './user.service';
 import { calculateOffset } from '../utils/pagination.utils';
 import { ConflictError, ForbiddenError, NotFoundError } from '../utils/error.utils';
@@ -274,5 +274,22 @@ export class FriendService {
 		});
 
 		return userFriendships;
+	}
+
+	/**
+	 * Get friendship stats
+	 */
+	public async getFriendshipStats(): Promise<UserFriendshipStats> {
+		const totalFriendshipsResponse = await this.db
+			.select({ totalUsers: sql<string>`COUNT(id)` }) // sql will return numbers as strings by default
+			.from(userFriends)
+			.prepare('count_total_users')
+			.execute();
+
+		const totalFriendshipsFromResponse = totalFriendshipsResponse[0].totalUsers || '0';
+
+		return {
+			total: parseInt(totalFriendshipsFromResponse),
+		};
 	}
 }

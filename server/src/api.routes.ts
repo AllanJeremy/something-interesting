@@ -4,6 +4,7 @@ import { Hono } from 'hono';
 import { createDbConnection, DatabaseConnection } from './db';
 
 // Routes
+import statsRoutes from './routes/stats.routes';
 import userRoutes from './routes/users.routes';
 import userFriendsRoutes from './routes/userFriends.routes';
 
@@ -82,6 +83,7 @@ app.get('/', (c) => {
 	);
 });
 
+app.route('/stats', statsRoutes);
 app.route('/users', userRoutes);
 app.route('/users/:userId/friends', userFriendsRoutes);
 //#endregion Routes
