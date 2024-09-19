@@ -29,7 +29,11 @@ This project includes 3 things:
 
 ---
 
-## Setting up the project
+# Setting up the project
+
+Since this project contains both a backend (`server/`) and frontend (`client/`), we'll need to set up **both** in order to get everything up and running smoothly.
+
+The following steps will guide you through cloning the project and getting it set up on your machine.
 
 ```sh
 # clone with ssh
@@ -42,32 +46,31 @@ git clone https://github.com/AllanJeremy/doge-labs-vr.git
 cd aj-doge-labs
 ```
 
-## Installing dependencies
+## Setting up the Backend
 
-> TODO: Add instructions for frontend vs backend
+### Step 1: Install Dependencies
 
-For this project, we are using [bun](https://bun.sh/) for running the project and managing dependencies.
-
-If you haven't already set it up on your machine, then please follow the instructions on the [bun website](https://bun.sh/).
-
-Once `bun` is setup, run the following command to install the project's dependencies:
+Navigate to the `server/` directory and run `bun install` to install dependencies.
 
 ```sh
+# cd into the server directory - assuming you're at the root ./
+cd server
+
+# Install dependencies
 bun install
 ```
 
-## Setting up the database
+### Step 2: Configure Environment Variables
 
-For us to be able to connect to our database, we need to provide a valid [Neon/Postgres] `DATABASE_URL`. We recommend creating a new project on `Neon` and setting up a dev branch.
-
-### Configuring environment variables
-
-- Copy the `.dev.vars.example` file in the root directory and rename it to `.dev.vars`
-- Update the environment variables with the correct values (sensible defaults are already set up when possible)
+Copy the `.dev.vars.example` file in the `server/` directory and rename it to `.dev.vars` in the same directory. Update the environment variables with the correct values (sensible defaults are already set up when possible).
 
 > Tip: The file also contains tips on what values are expected for each environment variable
 
-### Running database migrations
+### Step 3: Set up the Database
+
+To connect to our database, a valid [Neon/Postgres] `DATABASE_URL` is required. We suggest creating a new project on [Neon](https://neon.tech/) and setting up a dev branch.
+
+### Step 4: Run Database Migrations
 
 In order to create our database and its tables, we need to run migrations. You can use the following command
 
@@ -83,17 +86,69 @@ When adding your own schemas or modifying a schema, you will need to generate ne
 bun db:generate
 ```
 
+### Step 5: Seed the Database with Fake Records (Optional)
+
+To populate the database with fake records for testing purposes, you can use the `db:seed` command. This command utilizes [Faker.js](https://fakerjs.dev/) to generate realistic fake data.
+
+### Step 6: Start the Backend Server
+
+Use `bun dev` to start the backend development server.
+
+```sh
+# Start the backend development server while in the 'server/' directory
+bun dev
+```
+
+---
+
+## Setting up the Frontend
+
+### Step 1: Install Dependencies
+
+Navigate to the `client/` directory and run `bun install` to install dependencies.
+
+```sh
+# cd into the client directory - assuming you're at the root ./
+cd client
+
+# Install dependencies
+bun install
+```
+
+### Step 2: Start the Frontend Development Server
+
+Use `bun dev` to start the frontend development server.
+
+```sh
+# Start the frontend development server while in the 'client/' directory
+bun dev
+```
+
+### Description
+
+This project provides a basic setup for a full-stack application using React, TypeScript, and Vite. It includes instructions for setting up the backend and frontend, running the project locally, and deploying to Cloudflare Workers.
+
 ---
 
 ## Running the project locally
 
-To run the project locally, use the following command:
+To run the project locally, you will need to start both the backend and frontend servers simultaneously. This might require using two separate terminal windows.
+
+First, follow the instructions in **Setting up the Backend** to ensure your backend is correctly setup. Then, in one terminal window, navigate to the project root and run:
 
 ```sh
 bun dev
 ```
 
-The project should now be accessible via [http://localhost:8787](http://localhost:8787).
+This will start the backend server. The backend should now be accessible via [http://localhost:8787](http://localhost:5173).
+
+In another terminal window, navigate to the `client/` directory and run:
+
+```sh
+bun dev
+```
+
+This will start the frontend. The frontend should now be accessible via [http://localhost:5173](http://localhost:5173).
 
 ## Deploying to CloudFlare Workers
 
