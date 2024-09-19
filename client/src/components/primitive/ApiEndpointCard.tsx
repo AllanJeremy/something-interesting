@@ -17,9 +17,7 @@ function _copyApiEndpoint(title: string, path: string) {
 	const fullApiUrl = `${apiUrl}${path}`;
 
 	navigator.clipboard.writeText(fullApiUrl);
-	toast.success(`Copied "${title}" endpoint URL: ${fullApiUrl}`, {
-		position: "bottom-center",
-	});
+	toast.success(`Copied "${title}" endpoint URL: ${fullApiUrl}`);
 }
 
 function ApiEndpointCard({
