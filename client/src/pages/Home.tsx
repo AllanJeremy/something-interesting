@@ -1,7 +1,7 @@
 import React from "react";
 import Meteors from "@/components/magicui/meteors";
 import StatsContainer from "@/components/stats/StatsContainer";
-import ApiCard from "@/components/UsersCard";
+import ApiCard from "@/components/users/UsersCard";
 import Navbar from "@/components/primitive/Navbar";
 
 const Home: React.FC = () => {
