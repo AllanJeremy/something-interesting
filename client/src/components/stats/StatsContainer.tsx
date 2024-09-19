@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useStats } from "@/hooks";
 import ErrorCard from "../primitive/ErrorCard";
@@ -29,24 +29,10 @@ function StatsContainer() {
 		isPending: statsArePending,
 		isSuccess: statsSuccessfullyLoaded,
 	} = useStats();
-	const [averageFriendsPerUser, _setAverageFriendsPerUser] =
-		useState<number>(0);
 
 	const [userStatsDialogIsOpen, _setUserStatsDialogIsOpen] = useState(false);
 	const [friendshipStatsDialogIsOpen, _setFriendshipStatsDialogIsOpen] =
 		useState(false);
-
-	//
-	useEffect(() => {
-		if (!stats) return;
-
-		// Only attempt calculating the average if there are both users and friendships
-		if (stats.users.total > 0 && stats.friendships.total > 0) {
-			_setAverageFriendsPerUser(stats.friendships.total / stats.users.total);
-		} else {
-			_setAverageFriendsPerUser(0);
-		}
-	}, [stats]);
 
 	return (
 		<>
@@ -75,7 +61,11 @@ function StatsContainer() {
 				<CardContent>
 					{
 						// Handle loading
-						(statsAreLoading || statsArePending) && <StatsLoadingSkeleton />
+						(statsAreLoading || statsArePending) && (
+							<StatsLoadingSkeleton
+								className={cn(STATS_HEIGHT_CLASS, STATS_GAP_CLASS)}
+							/>
+						)
 					}
 					{
 						// Handle errors
@@ -100,7 +90,7 @@ function StatsContainer() {
 								<StatCard
 									className={STATS_HEIGHT_CLASS}
 									title="Average friends per user"
-									value={averageFriendsPerUser}
+									value={stats.friendships.averageFriendshipsPerUser}
 									imgUrl="/backgrounds/doge-standing.jpg"
 									onClick={() => _setFriendshipStatsDialogIsOpen(true)}
 								/>

@@ -10,6 +10,7 @@ export type CreateUserFriendData = Pick<typeof userFriends.$inferInsert, 'userId
 export type UserFriendship = typeof userFriends.$inferSelect;
 export type UserFriendshipStats = {
 	total: number;
+	averageFriendshipsPerUser: number;
 };
 
 export type UserFriendshipWithUser = UserFriendship & {

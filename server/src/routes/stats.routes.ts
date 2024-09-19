@@ -13,9 +13,15 @@ app.get('/', async (c) => {
 		const userStats = await userService.getUserStats();
 		const friendshipStats = await friendService.getFriendshipStats();
 
+		let averageFriendshipsPerUser: number = 0;
+
+		if (userStats.total > 0 && friendshipStats.total > 0) {
+			averageFriendshipsPerUser = friendshipStats.total / userStats.total;
+		}
+
 		const userAndFriendshipStats: UserAndFriendshipStats = {
 			users: userStats,
-			friendships: friendshipStats,
+			friendships: { ...friendshipStats, averageFriendshipsPerUser },
 		};
 
 		return handleApiSuccess<UserAndFriendshipStats>(c, userAndFriendshipStats, 'Stats found');

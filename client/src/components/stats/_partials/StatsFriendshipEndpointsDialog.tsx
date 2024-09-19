@@ -1,3 +1,4 @@
+import ApiEndpointCard from "@/components/primitive/ApiEndpointCard";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -24,14 +25,52 @@ function StatsFriendshipEndpointsDialog({
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>
-						You have {friendshipStats.total} friendships
+						{friendshipStats.total} total friendships. Average of{" "}
+						{friendshipStats.averageFriendshipsPerUser.toLocaleString()} per
+						user
 					</DialogTitle>
 					<DialogDescription>
-						This action cannot be undone. This will permanently delete your
-						account and remove your data from our servers.
+						We fetched this stat through this endpoint:{" "}
+						<ApiEndpointCard
+							className="mt-3"
+							title="Get Stats"
+							method="GET"
+							endpoint="/stats"
+						/>
+					</DialogDescription>
+					<DialogDescription>
+						<h2 className="text-lg font-semibold mt-6 mb-2">
+							Friendship related endpoints
+						</h2>
+
+						<section className="space-y-4">
+							<ApiEndpointCard
+								title="Add Friend"
+								description="This endpoint is used to add a new friend to the user's friend list."
+								method="POST"
+								endpoint="/friends"
+							/>
+							<ApiEndpointCard
+								title="Get Friends"
+								description="This endpoint retrieves a list of all friends for a given user."
+								method="GET"
+								endpoint="/friends"
+							/>
+							<ApiEndpointCard
+								title="Confirm Friend Request"
+								description="This endpoint confirms a friend request."
+								method="PATCH"
+								endpoint="/friends/:friendshipId"
+							/>
+							<ApiEndpointCard
+								title="Remove Friend"
+								description="This endpoint removes a friend from the user's friend list."
+								method="DELETE"
+								endpoint="/friends/:friendshipId"
+							/>
+						</section>
 					</DialogDescription>
 				</DialogHeader>
-
 				<DialogFooter className="sm:justify-start">
 					<DialogClose asChild>
 						<Button

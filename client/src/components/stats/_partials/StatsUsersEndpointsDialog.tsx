@@ -1,3 +1,5 @@
+import ApiEndpointCard from "@/components/primitive/ApiEndpointCard";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
 	DialogHeader,
@@ -24,10 +26,35 @@ function StatsUsersEndpointsDialog({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>You have {userStats.total} users</DialogTitle>
+					<DialogTitle>We have {userStats.total} total users</DialogTitle>
 					<DialogDescription>
-						This action cannot be undone. This will permanently delete your
-						account and remove your data from our servers.
+						We fetched this stat through this endpoint:{" "}
+						<ApiEndpointCard
+							className="mt-3"
+							title="Get Stats"
+							method="GET"
+							endpoint="/stats"
+						/>
+					</DialogDescription>
+					<DialogDescription>
+						<h2 className="text-lg font-semibold mt-6 mb-2">
+							User related endpoints
+						</h2>
+
+						<section className="space-y-4">
+							<ApiEndpointCard
+								title="Create User"
+								description="This endpoint is used to create a new user in the system."
+								method="POST"
+								endpoint="/users"
+							/>
+							<ApiEndpointCard
+								title="Get Users"
+								description="This endpoint retrieves a list of all users in the system."
+								method="GET"
+								endpoint="/users"
+							/>
+						</section>
 					</DialogDescription>
 				</DialogHeader>
 				<DialogFooter className="sm:justify-start">
