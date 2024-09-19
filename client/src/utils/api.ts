@@ -13,7 +13,7 @@ async function _fetchApi<T>(
 	path: string,
 	init?: RequestInit
 ): Promise<ApiSuccessResponse<T>> {
-	const url = `${API_BASE_URL}/${path}`;
+	const url = `${API_BASE_URL}${path}`;
 	console.log("Vite config loaded", import.meta.env.DEV);
 
 	const response = await fetch(url, init);

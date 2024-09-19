@@ -3,15 +3,15 @@ import { UserAndFriendshipStats } from "@server/types";
 import { useQuery } from "@tanstack/react-query";
 
 export const useStats = () => {
-	async function loadStats(): Promise<UserAndFriendshipStats> {
-		const { data: stats } = await getRequest<UserAndFriendshipStats>("stats");
+	async function _loadStats(): Promise<UserAndFriendshipStats> {
+		const { data: stats } = await getRequest<UserAndFriendshipStats>("/stats");
 
 		return stats;
 	}
 
 	const statsQuery = useQuery({
 		queryKey: ["stats"],
-		queryFn: loadStats,
+		queryFn: _loadStats,
 	});
 
 	return { statsQuery };
