@@ -28,7 +28,7 @@ const Home: React.FC = () => {
 					</h1>
 					<p className="mt-4 text-lg font-light text-gray-700">
 						Pronounced "Dojo", this is a safe space to check out various stats &
-						run simulations on the BigBallerz friend feature
+						run simulations on the friend feature
 					</p>
 				</section>
 

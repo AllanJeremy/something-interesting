@@ -129,7 +129,7 @@ With great power, comes some compromise, or whatever Uncle Ben from spiderman sa
 
 Anyway, here are some assumptions I made while creating these APIs:
 
-1. The database should be able to handle 10M users (BigBallerz currently has 2M users)
+1. The database should be able to handle 10M users (100K concurrent)
 2. Reads are more frequent than writes - we make additional queries when adding new friends to cache the number of friends/pending friend requests a user has
 
 ---
