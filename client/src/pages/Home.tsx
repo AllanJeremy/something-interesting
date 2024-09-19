@@ -23,7 +23,7 @@ const Home: React.FC = () => {
 
 			<main>
 				<section className="text-center mb-12">
-					<h1 className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-400/80 bg-clip-text text-6xl font-bold leading-none text-transparent dark:from-white dark:to-slate-900/10">
+					<h1 className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-400/80 bg-clip-text text-6xl font-bold leading-tight text-transparent dark:from-white dark:to-slate-900/10">
 						Welcome to the Doge-o
 					</h1>
 					<p className="mt-4">
