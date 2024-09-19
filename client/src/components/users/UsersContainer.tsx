@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import WordRotate from "../magicui/word-rotate";
 import UsersTable from "./_partials/UsersTable";
 
-function ApiCard() {
+function UsersContainer() {
 	return (
 		<Card className="mb-12">
 			<CardHeader>
@@ -32,4 +32,4 @@ function ApiCard() {
 	);
 }
 
-export default ApiCard;
+export default UsersContainer;

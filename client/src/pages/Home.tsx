@@ -1,7 +1,7 @@
 import React from "react";
 import Meteors from "@/components/magicui/meteors";
 import StatsContainer from "@/components/stats/StatsContainer";
-import ApiCard from "@/components/users/UsersCard";
+import UsersContainer from "@/components/users/UsersContainer";
 import Navbar from "@/components/primitive/Navbar";
 
 const Home: React.FC = () => {
@@ -38,7 +38,7 @@ const Home: React.FC = () => {
 				</section>
 
 				<div>
-					<ApiCard />
+					<UsersContainer />
 				</div>
 			</main>
 		</div>
