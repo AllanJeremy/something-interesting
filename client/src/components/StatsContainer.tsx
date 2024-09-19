@@ -9,10 +9,11 @@ import WordRotate from "./magicui/word-rotate";
 
 //#region Helper components
 const STATS_HEIGHT_CLASS = "h-64";
+const STATS_GAP_CLASS = "gap-6";
 
 const StatsLoadingSkeleton = () => {
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+		<div className={cn("grid grid-cols-1 md:grid-cols-3 ", STATS_GAP_CLASS)}>
 			{[...Array(3)].map((_, i) => (
 				<Skeleton
 					key={`stat-skeleton-${i}`}
@@ -36,7 +37,8 @@ const StatCard = ({
 		<Card
 			className={cn(
 				STATS_HEIGHT_CLASS,
-				"shadow-none text-center flex flex-col justify-center relative"
+				"shadow-none text-center flex flex-col justify-center relative",
+				"hover:cursor-pointer hover:scale-105 hover:shadow-xl transition-all duration-100"
 			)}
 		>
 			{/* Background */}
@@ -46,7 +48,7 @@ const StatCard = ({
 					alt="Background"
 					className="absolute top-0 left-0 w-full h-full object-cover rounded-xl object-center"
 				/>
-				<div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-60 rounded-xl"></div>
+				<div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-60  rounded-xl"></div>
 			</div>
 
 			<CardHeader className="relative p-2">
@@ -107,7 +109,9 @@ function StatsContainer() {
 				{
 					// Display stats
 					statsSuccessfullyLoaded && (
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+						<div
+							className={cn("grid grid-cols-1 md:grid-cols-3", STATS_GAP_CLASS)}
+						>
 							<StatCard
 								title="Total users"
 								value={stats.users.total}
