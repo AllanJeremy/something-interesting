@@ -6,12 +6,4 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
 	plugins: [tsconfigPaths(), react()],
 	resolve: {},
-	server: {
-		proxy: {
-			"/api": {
-				target: "https://api.aj-doge.workers.dev",
-				changeOrigin: true,
-			},
-		},
-	},
 });
