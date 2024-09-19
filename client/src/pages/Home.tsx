@@ -2,6 +2,7 @@ import React from "react";
 import Meteors from "@/components/magicui/meteors";
 import StatsContainer from "@/components/stats/StatsContainer";
 import ApiCard from "@/components/UsersCard";
+import Navbar from "@/components/primitive/Navbar";
 
 const Home: React.FC = () => {
 	return (
@@ -11,14 +12,7 @@ const Home: React.FC = () => {
 			<header className="flex justify-between items-center mb-8">
 				<img src="/doge-o-logo.png" height="72" alt="The Doge-o logo" />
 
-				<nav>
-					<a
-						href="https://github.com/AllanJeremy/something-interesting"
-						className="mr-4"
-					>
-						Github
-					</a>
-				</nav>
+				<Navbar />
 			</header>
 
 			<main>
