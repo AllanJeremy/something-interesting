@@ -224,3 +224,5 @@ Based on how we have structured the project, here are a few potential areas of i
 10. Add friendlier error message responses from db instead of forwarding db error as response (for example: when creating duplicate records)
 
 11. Use transactions in write queries for atomic queries (eg. if we fail to increment friend count, don't decrement pending friend count)
+
+12. Implement Message Queues (e.g. [RabbitMQ](https://www.rabbitmq.com/)) for managing, prioritizing, and processing a large number of concurrent requests.
