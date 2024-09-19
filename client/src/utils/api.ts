@@ -14,10 +14,20 @@ async function _fetchApi<T>(
 	init?: RequestInit
 ): Promise<ApiSuccessResponse<T>> {
 	const url = `${API_BASE_URL}${path}`;
-	console.log("Vite config loaded", import.meta.env.DEV);
 
-	const response = await fetch(url, init);
+	const response = await fetch(url, {
+		...init,
+		headers: {
+			"Content-Type": "application/json",
+			...init?.headers,
+		},
+	});
+
 	const apiResponse = (await response.json()) as ApiSuccessResponse<T>;
+
+	if (!response.ok) {
+		throw new Error(apiResponse.message);
+	}
 
 	return apiResponse;
 }
