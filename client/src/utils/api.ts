@@ -1,12 +1,13 @@
 import { ApiSuccessResponse } from "@server/types";
 
-const API_BASE_URL = "https://api.aj-doge.workers.dev";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 async function _fetchApi<T>(
 	path: string,
 	init?: RequestInit
 ): Promise<ApiSuccessResponse<T>> {
 	const url = `${API_BASE_URL}/${path}`;
+	console.log("Vite config loaded", import.meta.env.DEV);
 
 	const response = await fetch(url, init);
 	const apiResponse = (await response.json()) as ApiSuccessResponse<T>;
