@@ -13,7 +13,7 @@ const Home: React.FC = () => {
 
 				<nav>
 					<a
-						href="https://github.com/AllanJeremy/doge-labs-vr"
+						href="https://github.com/AllanJeremy/something-interesting"
 						className="mr-4"
 					>
 						Github

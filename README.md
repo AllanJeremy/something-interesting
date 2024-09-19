@@ -37,13 +37,13 @@ The following steps will guide you through cloning the project and getting it se
 
 ```sh
 # clone with ssh
-git clone git@github.com:AllanJeremy/doge-labs-vr.git
+git clone git@github.com:AllanJeremy/something-interesting.git
 
 # or: clone with https
-git clone https://github.com/AllanJeremy/doge-labs-vr.git
+git clone https://github.com/AllanJeremy/something-interesting.git
 
 # cd into the repository directory
-cd aj-doge-labs
+cd something-interesting
 ```
 
 ## Setting up the Backend
