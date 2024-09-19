@@ -1,1 +1,1 @@
-export * from "./Github";
+export * from "./Github.icon";
