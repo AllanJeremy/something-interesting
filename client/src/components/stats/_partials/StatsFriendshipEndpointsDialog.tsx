@@ -48,25 +48,25 @@ function StatsFriendshipEndpointsDialog({
 								title="Add Friend"
 								description="This endpoint is used to add a new friend to the user's friend list."
 								method="POST"
-								endpoint="/friends"
+								endpoint="/:userId/friends"
 							/>
 							<ApiEndpointCard
 								title="Get Friends"
 								description="This endpoint retrieves a list of all friends for a given user."
 								method="GET"
-								endpoint="/friends"
+								endpoint="/:userId/friends"
 							/>
 							<ApiEndpointCard
 								title="Confirm Friend Request"
 								description="This endpoint confirms a friend request."
 								method="PATCH"
-								endpoint="/friends/:friendshipId"
+								endpoint="/:userId/friends/:friendshipId"
 							/>
 							<ApiEndpointCard
 								title="Remove Friend"
 								description="This endpoint removes a friend from the user's friend list."
 								method="DELETE"
-								endpoint="/friends/:friendshipId"
+								endpoint="/:userId/friends/:friendshipId"
 							/>
 						</section>
 					</DialogDescription>
