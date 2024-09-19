@@ -124,10 +124,6 @@ Use `bun dev` to start the frontend development server.
 bun dev
 ```
 
-### Description
-
-This project provides a basic setup for a full-stack application using React, TypeScript, and Vite. It includes instructions for setting up the backend and frontend, running the project locally, and deploying to Cloudflare Workers.
-
 ---
 
 ## Running the project locally
