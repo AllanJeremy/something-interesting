@@ -57,6 +57,9 @@ function StatsContainer() {
 						className="text-4xl font-bold text-black dark:text-white"
 						words={["Stats", "Insights", "Analytics"]}
 					/>
+					<p className="mt-4 text-lg font-light text-slate-700/80">
+						Click on any card to see the endpoints responsible for them 😁
+					</p>
 				</CardHeader>
 				<CardContent>
 					{
