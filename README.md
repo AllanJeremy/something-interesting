@@ -63,7 +63,7 @@ For us to be able to connect to our database, we need to provide a valid [Neon/P
 ### Configuring environment variables
 
 - Copy the `.dev.vars.example` file in the root directory and rename it to `.dev.vars`
-- Replace the values of the environment variables with
+- Update the environment variables with the correct values (sensible defaults are already set up when possible)
 
 > Tip: The file also contains tips on what values are expected for each environment variable
 
