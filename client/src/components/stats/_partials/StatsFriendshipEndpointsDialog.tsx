@@ -25,9 +25,8 @@ function StatsFriendshipEndpointsDialog({
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>
-						{friendshipStats.total} total friendships. Average of{" "}
-						{friendshipStats.averageFriendshipsPerUser.toLocaleString()} per
-						user
+						{friendshipStats.total} friendships. Avg{" "}
+						{friendshipStats.averageFriendshipsPerUser.toLocaleString()}/ user
 					</DialogTitle>
 					<DialogDescription>
 						We fetched this stat through this endpoint:{" "}
