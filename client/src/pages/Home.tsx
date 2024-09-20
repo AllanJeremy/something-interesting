@@ -1,7 +1,8 @@
 import React from "react";
 import Meteors from "@/components/magicui/meteors";
-import StatsContainer from "@/components/StatsContainer";
-import ApiCard from "@/components/UsersCard";
+import StatsContainer from "@/components/stats/StatsContainer";
+import UsersContainer from "@/components/users/UsersContainer";
+import Navbar from "@/components/primitive/Navbar";
 
 const Home: React.FC = () => {
 	return (
@@ -11,14 +12,7 @@ const Home: React.FC = () => {
 			<header className="flex justify-between items-center mb-8">
 				<img src="/doge-o-logo.png" height="72" alt="The Doge-o logo" />
 
-				<nav>
-					<a
-						href="https://github.com/AllanJeremy/something-interesting"
-						className="mr-4"
-					>
-						Github
-					</a>
-				</nav>
+				<Navbar />
 			</header>
 
 			<main>
@@ -39,12 +33,16 @@ const Home: React.FC = () => {
 						Let's run some simulations
 					</h1>
 					<p className="mt-4 text-lg font-light text-gray-700">
-						Test out API endpoints for the friend feature here. Please scroll :)
+						Didn't manage to showcase all endpoints here due to time
+						constraints, but here's a little taste 😊.
+					</p>
+					<p className="mt-4 text-sm font-light text-gray-700">
+						Also, I've seeded the database with some fake users.
 					</p>
 				</section>
 
 				<div>
-					<ApiCard />
+					<UsersContainer />
 				</div>
 			</main>
 		</div>

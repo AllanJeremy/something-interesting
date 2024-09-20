@@ -279,7 +279,7 @@ export class FriendService {
 	/**
 	 * Get friendship stats
 	 */
-	public async getFriendshipStats(): Promise<UserFriendshipStats> {
+	public async getFriendshipStats(): Promise<Omit<UserFriendshipStats, 'averageFriendshipsPerUser'>> {
 		const totalFriendshipsResponse = await this.db
 			.select({ totalUsers: sql<string>`COUNT(id)` }) // sql will return numbers as strings by default
 			.from(userFriends)
