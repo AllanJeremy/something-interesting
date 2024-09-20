@@ -3,6 +3,12 @@ import { CreateUserData, User } from "@server/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+/**
+ * Custom hook to manage user-related operations.
+ * @param {Function} [onCreateSuccess] - Callback function to be called on successful user creation.
+ * @param {Function} [onCreateError] - Callback function to be called on user creation error.
+ * @returns {Object} - An object containing user query, create user mutation, and exposed functions (such as handleCreateUser).
+ */
 export const useUser = (
 	onCreateSuccess?: (userCreated: User) => void,
 	onCreateError?: (error: Error) => void
@@ -10,7 +16,11 @@ export const useUser = (
 	const queryClient = useQueryClient();
 
 	//#region API requests
-	/** Makes the API request to create the user */
+	/**
+	 * Makes the API request to create the user.
+	 * @param {CreateUserData} createUserData - The data for the user to create.
+	 * @returns {Promise<User>} - A promise that resolves to the created user.
+	 */
 	async function _createUser(createUserData: CreateUserData): Promise<User> {
 		const { data: userCreated } = await postRequest<User>(
 			"/users",
@@ -20,8 +30,13 @@ export const useUser = (
 		return userCreated;
 	}
 
-	/** Makes the API request to load all the users */
-	// TODO: Add search, pagination
+	/**
+	 * Makes the API request to load all the users.
+	 * @param {string} [search] - Optional search query to filter users by username.
+	 * @param {number} [page] - Optional page number for pagination.
+	 * @param {number} [limit] - Optional limit of users per page.
+	 * @returns {Promise<User[]>} - A promise that resolves to an array of User objects.
+	 */
 	async function _loadAllUsers(
 		search?: string,
 		page?: number,
@@ -54,7 +69,9 @@ export const useUser = (
 	//#endregion
 
 	//#region Queries
+
 	const userQuery = useQuery({
+		//TODO: Cache by search & pagination too
 		queryKey: ["users"],
 		queryFn: () => _loadAllUsers(),
 	});
@@ -88,7 +105,10 @@ export const useUser = (
 
 	//#region Exposed functions
 
-	/** Calls the create user mutation */
+	/**
+	 * Calls the create user mutation.
+	 * @param {CreateUserData} createUserData - The data for the user to create.
+	 */
 	function handleCreateUser(createUserData: CreateUserData) {
 		createUserMutation.mutate(createUserData);
 	}
