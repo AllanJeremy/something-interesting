@@ -60,7 +60,7 @@ When working on this project, please adhere to the following naming conventions:
 
 ## Error Handling
 
-When handling errors in this project, we prefer using the custom error classes defined in `src/backend/utils/error.utils.ts`. These error classes provide consistent error handling and messaging across the application.
+When handling errors in this project, we prefer using the custom error classes defined in `src/utils/error.utils.ts`. These error classes provide consistent error handling and messaging across the application.
 
 ### Using Custom Error Classes
 
