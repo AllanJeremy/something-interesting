@@ -9,11 +9,13 @@
 		"cf-typegen": "wrangler types",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx ./src/db/migrate.ts",
+		"db:seed": "tsx ./src/db/seed.ts",
 		"test": "vitest"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.4.31",
 		"@cloudflare/workers-types": "^4.20240909.0",
+		"@faker-js/faker": "^9.0.1",
 		"dotenv": "^16.4.5",
 		"drizzle-kit": "^0.24.2",
 		"postgres": "^3.4.4",
