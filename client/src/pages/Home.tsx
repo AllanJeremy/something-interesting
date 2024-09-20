@@ -34,7 +34,10 @@ const Home: React.FC = () => {
 					</h1>
 					<p className="mt-4 text-lg font-light text-gray-700">
 						Didn't manage to showcase all endpoints here due to time
-						constraints, but here's a little taste 😊
+						constraints, but here's a little taste 😊.
+					</p>
+					<p className="mt-4 text-sm font-light text-gray-700">
+						Also, I've seeded the database with some fake users.
 					</p>
 				</section>
 
