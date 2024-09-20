@@ -1,6 +1,6 @@
 import ErrorCard from "@/components/primitive/ErrorCard";
+import TableLoadingSkeleton from "@/components/primitive/TableLoadingSkeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
 	TableHeader,
 	TableRow,
@@ -15,12 +15,12 @@ function UsersTable() {
 	const { userQuery } = useUser();
 	const { data: users } = userQuery;
 
-	if (userQuery.isLoading) {
-		return <Skeleton />;
+	if (userQuery.isPending || userQuery.isLoading) {
+		return <TableLoadingSkeleton />;
 	}
 
 	if (userQuery.isError || !users) {
-		return <ErrorCard error={new Error("bruh")} />;
+		return <ErrorCard error={userQuery.error} />;
 	}
 
 	if (users.length === 0) {
