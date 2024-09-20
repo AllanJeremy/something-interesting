@@ -38,6 +38,9 @@ function UsersContainer() {
 						will be able to view friends for each user and toggle the active
 						user.
 					</p>
+					<p className="mt-4 text-sm font-light text-slate-700/80">
+						In future, you'd also be able to navigate between different pages
+					</p>
 				</CardHeader>
 				<CardContent>
 					<UsersTable />
