@@ -36,7 +36,7 @@ const StatCard = ({
 
 			<CardHeader className="relative p-2">
 				<CardTitle className="text-7xl font-bold text-white">
-					<NumberTicker className="text-white" value={value} />
+					{value ? <NumberTicker className="text-white" value={value} /> : 0}
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="relative">
