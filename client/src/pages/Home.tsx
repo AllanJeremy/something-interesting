@@ -33,7 +33,8 @@ const Home: React.FC = () => {
 						Let's run some simulations
 					</h1>
 					<p className="mt-4 text-lg font-light text-gray-700">
-						Test out API endpoints for the friend feature here. Please scroll :)
+						Didn't manage to showcase all endpoints here due to time
+						constraints, but here's a little taste 😊
 					</p>
 				</section>
 

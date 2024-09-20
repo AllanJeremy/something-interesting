@@ -38,9 +38,12 @@ function CreateUserForm({ onSuccess, onCancel }: CreateUserFormProps) {
 	//#endregion Handlers
 
 	//#region Effects
+	// TODO: Add actual validations with Zod
 	useEffect(() => {
 		const isComplete = Boolean(
-			_createUserData?.username && _createUserData?.email
+			_createUserData?.username &&
+				_createUserData?.email &&
+				_createUserData?.email.length > 4
 		);
 
 		_setCreateUserDataIsComplete(isComplete);
@@ -93,7 +96,11 @@ function CreateUserForm({ onSuccess, onCancel }: CreateUserFormProps) {
 					onClick={() => handleCreateUser(_createUserData)}
 					disabled={createUserMutation.isPending || !_createUserDataIsComplete}
 				>
-					{createUserMutation.isPending ? "Creating..." : "Create User"}
+					{createUserMutation.isPending
+						? "Creating..."
+						: _createUserDataIsComplete
+						? "Create User"
+						: "Incomplete Data"}
 				</Button>
 			</section>
 		</form>
