@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import WordRotate from "../magicui/word-rotate";
 import UsersTable from "./_partials/UsersTable";
-import { Button } from "../ui/button";
 import CreateUserDialog from "./_partials/CreateUserDialog";
 
 import { useState } from "react";
+import { RainbowButton } from "../magicui/rainbow-button";
 
 function UsersContainer() {
 	const [_createUserDialogIsOpen, _setCreateUserDialogIsOpen] = useState(false);
@@ -28,9 +28,9 @@ function UsersContainer() {
 							/>
 						</div>
 
-						<Button onClick={() => _setCreateUserDialogIsOpen(true)}>
+						<RainbowButton onClick={() => _setCreateUserDialogIsOpen(true)}>
 							Create user
-						</Button>
+						</RainbowButton>
 					</section>
 
 					<p className="mt-4 text-sm font-light text-slate-700/80">
