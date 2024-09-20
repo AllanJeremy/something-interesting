@@ -32,7 +32,7 @@ const Home: React.FC = () => {
 					<h1 className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-400/80 bg-clip-text text-6xl font-bold leading-none text-transparent dark:from-white dark:to-slate-900/10">
 						Let's run some simulations
 					</h1>
-					<p className="mt-4 text-lg font-light text-gray-700">
+					<p className="mt-4 text-md font-light text-gray-700">
 						Didn't manage to showcase all endpoints here due to time
 						constraints, but here's a little taste 😊.
 					</p>

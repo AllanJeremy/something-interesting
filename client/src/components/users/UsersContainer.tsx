@@ -17,14 +17,14 @@ function UsersContainer() {
 			/>
 			<Card className="mb-12">
 				<CardHeader>
-					<section className="flex justify-between">
+					<section className="flex flex-col-reverse md:flex-row  justify-between">
 						<div className="flex items-center">
 							<h2 className="mr-2 text-4xl font-bold text-black dark:text-white">
 								Manage
 							</h2>
 							<WordRotate
 								className="text-4xl font-bold text-black dark:text-white"
-								words={["users", "friends", "friend requests"]}
+								words={["users", "friends", "requests"]}
 							/>
 						</div>
 
