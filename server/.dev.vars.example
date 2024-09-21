@@ -1,2 +1,5 @@
 # Change this with your neon postgres database url
 DATABASE_URL=postgresql://user:password@localhost:5432/database
+
+# Used in local development within tests
+API_BASE_URL=http://localhost:8787
