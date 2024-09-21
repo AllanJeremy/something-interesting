@@ -255,23 +255,26 @@ export class FriendService {
 
 		const offset = calculateOffset(page, limit);
 
-		const userFriendships = await this.db.query.userFriends.findMany({
-			where: friendshipCondition,
-			with: {
-				user: {
-					columns: {
-						username: true,
+		const userFriendships = await this.db.query.userFriends
+			.findMany({
+				where: friendshipCondition,
+				with: {
+					user: {
+						columns: {
+							username: true,
+						},
+					},
+					friend: {
+						columns: {
+							username: true,
+						},
 					},
 				},
-				friend: {
-					columns: {
-						username: true,
-					},
-				},
-			},
-			limit: limit,
-			offset: offset,
-		});
+				limit: limit,
+				offset: offset,
+			})
+			.prepare('get_user_friend_list')
+			.execute();
 
 		return userFriendships;
 	}
