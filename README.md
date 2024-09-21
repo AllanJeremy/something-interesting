@@ -230,3 +230,5 @@ Based on how we have structured the project, here are a few potential areas of i
 13. Validate inputs using zod schema on the frontend (potentially even share input validation with backend).
 
 14. Figure out how to run integration tests in staging rather than production (setup staging deployment)
+
+15. **Run tests in CI** - Currently tests can only run locally as they have been configured to work in cloudflare worker environments (which GitHub actions is not). This means that in GitHub actions, we don't have access to the same environment variables we have access to locally.
