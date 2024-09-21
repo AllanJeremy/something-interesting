@@ -22,6 +22,13 @@ jobs:
         working-directory: ./server
         run: bun install
 
+      - name: Print working directory before tests
+        run: pwd
+
+      - name: Setup environment variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .dev.vars
+
       - name: Run tests
         working-directory: ./server
         run: bun run test
