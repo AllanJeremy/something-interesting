@@ -63,12 +63,8 @@ app.use('*', async (c, next) => {
 	await next();
 });
 
-// Set userId for users/:userId routes
-//TODO: Add userId validation with Zod
-app.use('/users/:userId/*', validateUserIdParam, async (c, next) => {
-	console.log('doing the validation thing');
-	await next();
-});
+// Validate userId param
+app.use('/users/:userId/*', validateUserIdParam);
 //#endregion Middleware
 
 //#region Routes
@@ -84,6 +80,7 @@ app.get('/', (c) => {
 
 app.route('/stats', statsRoutes);
 app.route('/users', userRoutes);
+app.route('/users/:userId/friends', userFriendsRoutes);
 
 //#endregion Routes
 
