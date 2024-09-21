@@ -35,6 +35,10 @@ function CreateUserForm({ onSuccess, onCancel }: CreateUserFormProps) {
 		const { name, value } = event.target;
 		_setCreateUserData({ ..._createUserData, [name]: value });
 	}
+
+	function _handleCreateUser() {
+		createUserMutation.mutate(_createUserData);
+	}
 	//#endregion Handlers
 
 	//#region Effects
@@ -50,9 +54,7 @@ function CreateUserForm({ onSuccess, onCancel }: CreateUserFormProps) {
 	}, [_createUserData]);
 	//#endregion Effects
 
-	const { handleCreateUser, createUserMutation } = useUser(
-		_resetCreateUserDataInputs
-	);
+	const { createUserMutation } = useUser(_resetCreateUserDataInputs);
 
 	return (
 		<form>
@@ -93,7 +95,7 @@ function CreateUserForm({ onSuccess, onCancel }: CreateUserFormProps) {
 
 				<Button
 					type="button"
-					onClick={() => handleCreateUser(_createUserData)}
+					onClick={_handleCreateUser}
 					disabled={createUserMutation.isPending || !_createUserDataIsComplete}
 				>
 					{createUserMutation.isPending
