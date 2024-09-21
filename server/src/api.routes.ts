@@ -13,6 +13,7 @@ import { UserService } from './services/user.service';
 import { FriendService } from './services/friend.service';
 import { handleApiError, handleApiSuccess } from './utils/api.utils';
 import { InternalServerError, NotFoundError } from './utils/error.utils';
+
 //#endregion Service imports
 
 export type Env = {
@@ -20,7 +21,7 @@ export type Env = {
 };
 
 // Register any services that are used in the backend here
-export type Vars = { userService: UserService; friendService: FriendService; userId?: string };
+export type Vars = { userService: UserService; friendService: FriendService };
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
@@ -64,11 +65,7 @@ app.use('*', async (c, next) => {
 // Set userId for users/:userId routes
 //TODO: Add userId validation with Zod
 app.use('/users/:userId/*', async (c, next) => {
-	const userId = c.req.param('userId');
-	if (!userId) {
-		return c.json({ error: 'User ID is required' }, 400);
-	}
-	c.set('userId', userId);
+	console.log('doing the validation thing');
 	await next();
 });
 //#endregion Middleware
@@ -86,7 +83,7 @@ app.get('/', (c) => {
 
 app.route('/stats', statsRoutes);
 app.route('/users', userRoutes);
-app.route('/users/:userId/friends', userFriendsRoutes);
+
 //#endregion Routes
 
 //#region Error handling
