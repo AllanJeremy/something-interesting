@@ -14,6 +14,7 @@ import { FriendService } from './services/friend.service';
 import { handleApiError, handleApiSuccess } from './utils/api.utils';
 import { InternalServerError, NotFoundError } from './utils/error.utils';
 import { validateUserIdParam } from './middleware/common.middleware';
+import { env } from 'hono/adapter';
 
 //#endregion Service imports
 
@@ -50,6 +51,8 @@ function getDbConnection(databaseUrl: string): DatabaseConnection {
 
 //? If we had more services, we could only inject the services that are needed for that route
 app.use('*', async (c, next) => {
+	console.log('normal fetch: c.env', c.env);
+	console.log('new fetch: env(c)', env(c));
 	const db = getDbConnection(c.env.DATABASE_URL);
 
 	// Configure the UserService for all backend routes with the database connection
