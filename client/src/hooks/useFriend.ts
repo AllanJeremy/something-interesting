@@ -1,3 +1,3 @@
-export const useFriend = () => {
+export function useFriend() {
 	// TODO: Add implementation
-};
+}

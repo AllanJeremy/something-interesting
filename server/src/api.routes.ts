@@ -13,6 +13,8 @@ import { UserService } from './services/user.service';
 import { FriendService } from './services/friend.service';
 import { handleApiError, handleApiSuccess } from './utils/api.utils';
 import { InternalServerError, NotFoundError } from './utils/error.utils';
+import { validateUserIdParam } from './middleware/common.middleware';
+
 //#endregion Service imports
 
 export type Env = {
@@ -61,15 +63,6 @@ app.use('*', async (c, next) => {
 	await next();
 });
 
-// Set userId for users/:userId routes
-app.use('/users/:userId/*', async (c, next) => {
-	const userId = c.req.param('userId');
-	if (!userId) {
-		return c.json({ error: 'User ID is required' }, 400);
-	}
-	c.set('userId', userId);
-	await next();
-});
 //#endregion Middleware
 
 //#region Routes
@@ -85,7 +78,15 @@ app.get('/', (c) => {
 
 app.route('/stats', statsRoutes);
 app.route('/users', userRoutes);
+
+// Pass the user id to all relevant child routes after validating it
+app.use('/users/:userId/*', validateUserIdParam, (c, next) => {
+	// TODO: Find a way to validate that this was done in userFriendsRoute - since missing this line is an error prone situation
+	c.set('userId', c.req.param('userId'));
+	return next();
+});
 app.route('/users/:userId/friends', userFriendsRoutes);
+
 //#endregion Routes
 
 //#region Error handling

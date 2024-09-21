@@ -1,16 +1,14 @@
 import React from "react";
-import Meteors from "@/components/magicui/meteors";
 import StatsContainer from "@/components/stats/StatsContainer";
 import UsersContainer from "@/components/users/UsersContainer";
 import Navbar from "@/components/primitive/Navbar";
+import Logo from "@/assets/doge-o-logo.png";
 
 const Home: React.FC = () => {
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<Meteors number={10} />
-
 			<header className="flex justify-between items-center mb-8">
-				<img src="/doge-o-logo.png" height="72" alt="The Doge-o logo" />
+				<img src={Logo} height="72" alt="The Doge-o logo" />
 
 				<Navbar />
 			</header>

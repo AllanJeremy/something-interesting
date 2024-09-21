@@ -101,7 +101,7 @@ export class UserService {
 	 * @param userIds - The IDs of the users to update.
 	 * @returns A promise that resolves when the update is complete.
 	 */
-	private async updateUserCounts(
+	private async _updateUserCounts(
 		updateField: 'friendCount' | 'pendingFriendCount',
 		operation: 'increment' | 'decrement',
 		...userIds: string[]
@@ -129,7 +129,7 @@ export class UserService {
 	 * @returns A promise that resolves when the increment is complete.
 	 */
 	public async incrementFriendCount(...userIds: string[]): Promise<void> {
-		await this.updateUserCounts('friendCount', 'increment', ...userIds);
+		await this._updateUserCounts('friendCount', 'increment', ...userIds);
 	}
 
 	/**
@@ -138,7 +138,7 @@ export class UserService {
 	 * @returns A promise that resolves when the decrement is complete.
 	 */
 	public async decrementFriendCount(...userIds: string[]): Promise<void> {
-		await this.updateUserCounts('friendCount', 'decrement', ...userIds);
+		await this._updateUserCounts('friendCount', 'decrement', ...userIds);
 	}
 
 	/**
@@ -147,7 +147,7 @@ export class UserService {
 	 * @returns A promise that resolves when the increment is complete.
 	 */
 	public async incrementPendingFriendCount(...userIds: string[]): Promise<void> {
-		await this.updateUserCounts('pendingFriendCount', 'increment', ...userIds);
+		await this._updateUserCounts('pendingFriendCount', 'increment', ...userIds);
 	}
 
 	/**
@@ -156,7 +156,7 @@ export class UserService {
 	 * @returns A promise that resolves when the decrement is complete.
 	 */
 	public async decrementPendingFriendCount(...userIds: string[]): Promise<void> {
-		await this.updateUserCounts('pendingFriendCount', 'decrement', ...userIds);
+		await this._updateUserCounts('pendingFriendCount', 'decrement', ...userIds);
 	}
 
 	/**

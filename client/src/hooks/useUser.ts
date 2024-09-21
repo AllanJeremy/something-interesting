@@ -9,10 +9,10 @@ import { toast } from "sonner";
  * @param {Function} [onCreateError] - Callback function to be called on user creation error.
  * @returns {Object} - An object containing user query, create user mutation, and exposed functions (such as handleCreateUser).
  */
-export const useUser = (
+export function useUser(
 	onCreateSuccess?: (userCreated: User) => void,
 	onCreateError?: (error: Error) => void
-) => {
+) {
 	const queryClient = useQueryClient();
 
 	//#region API requests
@@ -42,6 +42,7 @@ export const useUser = (
 		page?: number,
 		limit?: number
 	): Promise<User[]> {
+		// TODO: Make this a separate hook
 		const urlSearchParams = new URLSearchParams();
 
 		if (search) {
@@ -103,23 +104,9 @@ export const useUser = (
 
 	//#endregion Queries
 
-	//#region Exposed functions
-
-	/**
-	 * Calls the create user mutation.
-	 * @param {CreateUserData} createUserData - The data for the user to create.
-	 */
-	function handleCreateUser(createUserData: CreateUserData) {
-		createUserMutation.mutate(createUserData);
-	}
-	//#endregion Exposed functions
-
 	return {
 		// React query related
 		userQuery,
 		createUserMutation,
-
-		// Exposed functions
-		handleCreateUser,
 	};
-};
+}

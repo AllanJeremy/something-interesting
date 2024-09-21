@@ -1,14 +1,13 @@
 import ApiEndpointCard from "@/components/primitive/ApiEndpointCard";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
-	DialogHeader,
-	DialogFooter,
 	Dialog,
-	DialogContent,
-	DialogTitle,
-	DialogDescription,
 	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
 } from "@/components/ui/dialog";
 
 import { UserStats } from "@server/types";

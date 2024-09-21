@@ -9,6 +9,11 @@ import StatsFriendshipEndpointsDialog from "./_partials/StatsFriendshipEndpoints
 import StatsLoadingSkeleton from "./_partials/StatsLoadingSkeleton";
 import StatsUsersEndpointsDialog from "./_partials/StatsUsersEndpointsDialog";
 
+//
+import DogePink from "@/assets/backgrounds/doge-pink.jpg";
+import DogeStanding from "@/assets/backgrounds/doge-standing.jpg";
+import DogeTrio from "@/assets/backgrounds/doge-trio.jpg";
+
 //#region Dialogs
 
 //#endregion Dialogs
@@ -88,21 +93,21 @@ function StatsContainer() {
 									className={STATS_HEIGHT_CLASS}
 									title="Total users"
 									value={stats.users.total}
-									imgUrl="/backgrounds/doge-pink.jpg"
+									imgUrl={DogePink}
 									onClick={() => _setUserStatsDialogIsOpen(true)}
 								/>
 								<StatCard
 									className={STATS_HEIGHT_CLASS}
 									title="Average friends per user"
 									value={stats.friendships.averageFriendshipsPerUser}
-									imgUrl="/backgrounds/doge-standing.jpg"
+									imgUrl={DogeStanding}
 									onClick={() => _setFriendshipStatsDialogIsOpen(true)}
 								/>
 								<StatCard
 									className={STATS_HEIGHT_CLASS}
 									title="Total friendships"
 									value={stats.friendships.total}
-									imgUrl="/backgrounds/doge-trio.jpg"
+									imgUrl={DogeTrio}
 									onClick={() => _setFriendshipStatsDialogIsOpen(true)}
 								/>
 							</div>

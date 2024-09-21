@@ -1,17 +1,16 @@
 import { Hono } from 'hono';
 import { Env, Vars } from '../api.routes';
-import { handleApiSuccess, handleApiError } from '../utils/api.utils';
-import { FriendService } from '../services/friend.service';
-import { BadRequestError } from '../utils/error.utils';
 import { validateAddFriend, validateFriendshipIdParam } from '../middleware/friend.middleware';
 import { validatePaginationQuery } from '../middleware/pagination.middleware';
+import { FriendService } from '../services/friend.service';
+import { handleApiError, handleApiSuccess } from '../utils/api.utils';
 
-const app = new Hono<{ Bindings: Env; Variables: Vars }>();
+const app = new Hono<{ Bindings: Env; Variables: Vars & { userId: string } }>();
 
 // Add a friend to a user's friend list.
 app.post('/', validateAddFriend, async (c) => {
 	const friendService = c.get('friendService');
-	const userId = c.get('userId') as string;
+	const userId = c.get('userId');
 	const { friendUserId } = c.req.valid('json');
 
 	try {
@@ -26,7 +25,7 @@ app.post('/', validateAddFriend, async (c) => {
 // Retrieve a list of all friends for a given user.
 app.get('/', validatePaginationQuery, async (c) => {
 	const friendService = c.get('friendService');
-	const userId = c.get('userId') as string;
+	const userId = c.get('userId');
 
 	// Get query parameters with default values
 	const { search: validSearch, limit: validLimit, page: validPage } = c.req.valid('query');
@@ -47,7 +46,7 @@ app.get('/', validatePaginationQuery, async (c) => {
 // Confirm a friend request
 app.patch('/:friendshipId', validateFriendshipIdParam, async (c) => {
 	const friendService = c.get('friendService');
-	const userId = c.get('userId') as string;
+	const userId = c.get('userId');
 	const friendshipId = c.req.param('friendshipId');
 
 	try {
@@ -62,7 +61,7 @@ app.patch('/:friendshipId', validateFriendshipIdParam, async (c) => {
 // Remove a friend from a user's friend list.
 app.delete('/:friendshipId', validateFriendshipIdParam, async (c) => {
 	const friendService = c.get('friendService');
-	const userId = c.get('userId') as string;
+	const userId = c.get('userId');
 	const friendshipId = c.req.param('friendshipId');
 
 	try {
