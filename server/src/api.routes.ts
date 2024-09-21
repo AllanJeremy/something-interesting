@@ -62,6 +62,7 @@ app.use('*', async (c, next) => {
 });
 
 // Set userId for users/:userId routes
+//TODO: Add userId validation with Zod
 app.use('/users/:userId/*', async (c, next) => {
 	const userId = c.req.param('userId');
 	if (!userId) {
