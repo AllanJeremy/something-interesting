@@ -90,7 +90,7 @@ export class FriendService {
 	}
 
 	/**
-	 * Adds a friend request between two users
+	 * Sends a friend request from the user with `userId` to the user with `friendUserId
 	 * @param userId The id of the user initiating the friend request
 	 * @param friendUserId The id of the user receiving the friend request
 	 * @returns {Promise<UserFriendship>} A promise that resolves to the friend request that was created
