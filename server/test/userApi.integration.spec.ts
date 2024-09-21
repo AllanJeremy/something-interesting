@@ -185,6 +185,17 @@ describe('User API', () => {
 
 				expect(actualFirstRecord.id).toBe(expectedFirstRecordId);
 			});
+
+			it('should return an empty array when pagination is out of bounds', async () => {
+				const page = 200;
+
+				// specify limit to control returned records (so we know what data to expect from page)
+				const response = await getUsers(`?page=${page}`);
+				expect(response.status).toBe(200);
+
+				const responseBody = (await response.json()) as any;
+				expect(responseBody.data).toHaveLength(0);
+			});
 		});
 	});
 });
