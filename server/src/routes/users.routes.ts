@@ -15,7 +15,7 @@ app.post('/', validateCreateUser, async (c) => {
 		const createUserData = c.req.valid('json');
 		const userCreated: User = await userService.createUser(createUserData);
 
-		return handleApiSuccess(c, userCreated, 'User created');
+		return handleApiSuccess(c, userCreated, 'User created', 201);
 	} catch (error: unknown) {
 		return handleApiError(c, error);
 	}
