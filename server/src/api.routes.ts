@@ -22,7 +22,7 @@ export type Env = {
 };
 
 // Register any services that are used in the backend here
-export type Vars = { userService: UserService; friendService: FriendService };
+export type Vars = { userService: UserService; friendService: FriendService; userId?: string };
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
@@ -63,8 +63,6 @@ app.use('*', async (c, next) => {
 	await next();
 });
 
-// Validate userId param
-app.use('/users/:userId/*', validateUserIdParam);
 //#endregion Middleware
 
 //#region Routes
@@ -80,6 +78,12 @@ app.get('/', (c) => {
 
 app.route('/stats', statsRoutes);
 app.route('/users', userRoutes);
+
+// Pass the user id to all relevant child routes after validating it
+app.use('/users/:userId/*', validateUserIdParam, (c, next) => {
+	c.set('userId', c.req.param('userId'));
+	return next();
+});
 app.route('/users/:userId/friends', userFriendsRoutes);
 
 //#endregion Routes
