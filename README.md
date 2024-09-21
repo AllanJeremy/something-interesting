@@ -228,3 +228,5 @@ Based on how we have structured the project, here are a few potential areas of i
 12. Implement Message Queues (e.g. [RabbitMQ](https://www.rabbitmq.com/)) for managing, prioritizing, and processing a large number of concurrent requests.
 
 13. Validate inputs using zod schema on the frontend (potentially even share input validation with backend).
+
+14. Figure out how to run integration tests in staging rather than production (setup staging deployment)
