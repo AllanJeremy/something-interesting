@@ -1,56 +1,5 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { testApiFetch } from './utils/api';
-
-//#region Helper functions
-function createUser(createUserData: any) {
-	const url = '/users';
-
-	return testApiFetch(url, {
-		method: 'POST',
-		body: JSON.stringify(createUserData),
-	});
-}
-
-/** Creates multiple fake users and returns their ids as an array */
-function getUserToCreateByIndex(index: number) {
-	return { username: `testuser${index}`, email: `test${index}@foo.com` };
-}
-
-async function createMultipleFakeUsers(numOfUsersToCreate: number): string[] {
-	let usersToCreate = [];
-
-	for (let i = 1; i <= numOfUsersToCreate; i++) {
-		const userToCreate = getUserToCreateByIndex(i);
-		usersToCreate.push(userToCreate);
-	}
-
-	// Create the users
-	const usersCreatedResponses = await Promise.all(usersToCreate.map(createUser));
-
-	const usersCreated = await Promise.all(
-		usersCreatedResponses.map(async (response) => {
-			const json = (await response.json()) as any;
-			return json.data;
-		})
-	);
-
-	const idsOfUsersCreated = usersCreated.map((user) => user.id);
-
-	return idsOfUsersCreated;
-}
-
-function deleteUser(userId: string) {
-	const url = `/users/${userId}`;
-
-	return testApiFetch(url, { method: 'DELETE' });
-}
-
-function getUsers(urlSuffix = '') {
-	const url = `/users${urlSuffix}`;
-
-	return testApiFetch(url, { method: 'GET' });
-}
-//#endregion Helper functions
+import { deleteUser, createUser, createMultipleFakeUsers, getUsers } from './utils/testUtils';
 
 //#region Tests
 describe('User API', () => {
