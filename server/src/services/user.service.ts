@@ -70,7 +70,9 @@ export class UserService {
 				username: createUserData.username,
 				email: createUserData.email,
 			})
-			.returning();
+			.returning()
+			.prepare('create_user')
+			.execute();
 
 		return createdUser[0];
 	}
@@ -89,7 +91,15 @@ export class UserService {
 		const offset = calculateOffset(page, limit);
 
 		//? We could optimize this by fetching less columns here
-		const usersFound = await this.db.select().from(users).where(searchCondition).limit(limit).offset(offset).orderBy(desc(users.updatedAt));
+		const usersFound = await this.db
+			.select()
+			.from(users)
+			.where(searchCondition)
+			.limit(limit)
+			.offset(offset)
+			.orderBy(desc(users.updatedAt))
+			.prepare('get_all_users')
+			.execute();
 
 		return usersFound;
 	}
@@ -120,6 +130,7 @@ export class UserService {
 			.set({ [updateField]: setValue })
 			// Update records for all of the userIds passed in as arguments
 			.where(sql`${users.id} = ANY(${sql.raw(`ARRAY[${userIds.map((id) => `'${id}'`).join(', ')}]::uuid[]`)})`)
+			.prepare(`${operation}_${updateField}`)
 			.execute();
 	}
 
