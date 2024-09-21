@@ -81,6 +81,7 @@ app.route('/users', userRoutes);
 
 // Pass the user id to all relevant child routes after validating it
 app.use('/users/:userId/*', validateUserIdParam, (c, next) => {
+	// TODO: Find a way to validate that this was done in userFriendsRoute - since missing this line is an error prone situation
 	c.set('userId', c.req.param('userId'));
 	return next();
 });
