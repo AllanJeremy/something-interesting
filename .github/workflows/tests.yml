@@ -7,9 +7,9 @@ on:
       - feat/tests
 
 jobs:
-  deploy:
+  tests:
     runs-on: ubuntu-latest
-    name: Deploy
+    name: RUN TESTS
     steps:
       - uses: actions/checkout@v4
 
