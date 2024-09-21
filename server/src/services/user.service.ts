@@ -131,7 +131,6 @@ export class UserService {
 		operation: 'increment' | 'decrement',
 		...userIds: string[]
 	): Promise<void> {
-		console.log('userIds', userIds);
 		let setValue: SQL<unknown>;
 
 		if (operation === 'increment') {
