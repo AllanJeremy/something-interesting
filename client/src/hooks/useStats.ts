@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
  * Custom hook to manage statistics-related operations.
  * @returns {Object} - An object containing the stats query.
  */
-export const useStats = () => {
+export function useStats() {
 	/**
 	 * Makes the API request to load stats from the API.
 	 * @returns {Promise<UserAndFriendshipStats>} - A promise that resolves to the user and friendship stats.
@@ -22,4 +22,4 @@ export const useStats = () => {
 	});
 
 	return { statsQuery };
-};
+}
