@@ -3,7 +3,7 @@ import { neon } from '@neondatabase/serverless';
 import * as schema from './schema';
 
 export function createDbConnection(databaseUrl: string) {
-	console.debug('creating database connection...', databaseUrl);
+	console.debug('creating database connection...', databaseUrl, 'process.env', process.env);
 	const sql = neon(databaseUrl);
 	return drizzle(sql, { schema });
 }
