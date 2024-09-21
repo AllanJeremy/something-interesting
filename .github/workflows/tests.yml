@@ -1,0 +1,30 @@
+name: Run some tests
+
+on:
+  push:
+    branches:
+      - main
+      - feat/tests
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: ./server
+        run: bun install
+
+      - name: Run tests
+        working-directory: ./server
+        run: bun run test
+
+      - name: Print working directory
+        run: pwd
