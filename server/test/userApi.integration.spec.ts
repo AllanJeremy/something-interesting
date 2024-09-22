@@ -1,8 +1,13 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { deleteUser, createUser, createMultipleFakeUsers, getUsers } from './utils/testUtils';
+import { deleteUser, createUser, createMultipleFakeUsers, getUsers, clearAllUsers } from './utils/testUtils';
 
 //#region Tests
-describe.only('User API', () => {
+describe('User API', () => {
+	beforeAll(async () => {
+		// This guarantees that we won't have any conflicts and reduces odds of tests failing due to forgetting to do proper cleanup
+		await clearAllUsers();
+	});
+
 	describe('User functionality', () => {
 		describe('Create user', () => {
 			let idsOfUsersCreated: string[] = [];
