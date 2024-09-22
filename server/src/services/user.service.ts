@@ -3,7 +3,7 @@ import { DatabaseConnection } from '../db';
 import { CreateUserData, User, UserStats } from '../types';
 import { desc, eq, ilike, SQL, sql } from 'drizzle-orm';
 import { calculateOffset } from '../utils/pagination.utils';
-import { ConflictError } from '../utils/error.utils';
+import { ConflictError, NotFoundError } from '../utils/error.utils';
 
 export class UserService {
 	//#region Constants
@@ -105,6 +105,21 @@ export class UserService {
 	}
 
 	/**
+	 * Deletes a user from the database.
+	 * @param userId - The ID of the user to delete.
+	 * @returns A promise that resolves to the deleted user object.
+	 */
+	public async deleteUser(userId: string) {
+		if (!(await this.userExists(userId))) {
+			throw new NotFoundError('User not found', 'Attempted to delete a user that does not exist.');
+		}
+
+		const deletedUserResult = await this.db.delete(users).where(eq(users.id, userId)).returning().prepare('delete_user').execute();
+
+		return deletedUserResult[0];
+	}
+
+	/**
 	 * Updates the friend count or pending friend count for specified users.
 	 * @param updateField - The field to update, either 'friendCount' or 'pendingFriendCount'.
 	 * @param operation - The operation to perform, either 'increment' or 'decrement'.
@@ -116,7 +131,6 @@ export class UserService {
 		operation: 'increment' | 'decrement',
 		...userIds: string[]
 	): Promise<void> {
-		console.log('userIds', userIds);
 		let setValue: SQL<unknown>;
 
 		if (operation === 'increment') {

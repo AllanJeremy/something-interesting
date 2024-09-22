@@ -180,8 +180,16 @@ With great power, comes some compromise, or whatever Uncle Ben from spiderman sa
 
 Anyway, here are some assumptions I made while creating these APIs:
 
-1. The database should be able to handle 10M users (100K concurrent)
+1. The database should be able to handle 2M users (100K concurrent)
 2. Reads are more frequent than writes - we make additional queries when adding new friends to cache the number of friends/pending friend requests a user has
+3. The production database is not the same as the development database
+   - We run integration tests against the database in the local app run
+   - While the tests don't completely erase the database, they do add and remove fake data into the database which might lead to collisions if those records happened to exist in a production environment
+4. The project is not migrating from cloudflare workers
+   - Our tests are built to work with cloudflare workers and would need the initialization to change if we switched service providers
+5. Deleting friends is irreversible. To become friends again you have to send a new request, and previous deleted requests are not stored.
+
+I probably missed something here, but these come top of mind.
 
 ---
 
@@ -228,3 +236,12 @@ Based on how we have structured the project, here are a few potential areas of i
 12. Implement Message Queues (e.g. [RabbitMQ](https://www.rabbitmq.com/)) for managing, prioritizing, and processing a large number of concurrent requests.
 
 13. Validate inputs using zod schema on the frontend (potentially even share input validation with backend).
+
+14. Figure out how to run integration tests in staging rather than production (setup staging deployment)
+
+15. **Run tests in CI** - Currently tests can only run locally as they have been configured to work in cloudflare worker environments (which GitHub actions is not). This means that in GitHub actions, we don't have access to the same environment variables we have access to locally.
+
+    - **Create a testing db** - This db would be specifically dedicated to running tests (potentially host a staging environment and use that for running tests).
+
+16. **Add tests for friendCount and pendingFriendCount being incremented/decremented appropriately** in integration tests.
+    - We use these fields to cache the friend and pending friend count of users

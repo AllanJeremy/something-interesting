@@ -5,6 +5,7 @@ import { User } from '../types';
 import { UserService } from '../services/user.service';
 import { validateCreateUser } from '../middleware/user.middleware';
 import { validatePaginationQuery } from '../middleware/pagination.middleware';
+import { validateUserIdParam } from '../middleware/common.middleware';
 
 const app = new Hono<{ Bindings: Env; Variables: Vars }>();
 
@@ -15,7 +16,7 @@ app.post('/', validateCreateUser, async (c) => {
 		const createUserData = c.req.valid('json');
 		const userCreated: User = await userService.createUser(createUserData);
 
-		return handleApiSuccess(c, userCreated, 'User created');
+		return handleApiSuccess(c, userCreated, 'User created', 201);
 	} catch (error: unknown) {
 		return handleApiError(c, error);
 	}
@@ -34,6 +35,19 @@ app.get('/', validatePaginationQuery, async (c) => {
 		const usersFound: User[] = await userService.getAllUsers(searchQuery, limit, page);
 
 		return handleApiSuccess(c, usersFound, 'Users found');
+	} catch (error: unknown) {
+		return handleApiError(c, error);
+	}
+});
+
+// Delete user
+app.delete('/:userId', validateUserIdParam, async (c) => {
+	const userService = c.get('userService');
+	const userId = c.req.param('userId');
+
+	try {
+		const deletedUser = await userService.deleteUser(userId);
+		return handleApiSuccess(c, deletedUser, 'User deleted');
 	} catch (error: unknown) {
 		return handleApiError(c, error);
 	}

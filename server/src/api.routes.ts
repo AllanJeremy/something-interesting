@@ -14,6 +14,7 @@ import { FriendService } from './services/friend.service';
 import { handleApiError, handleApiSuccess } from './utils/api.utils';
 import { InternalServerError, NotFoundError } from './utils/error.utils';
 import { validateUserIdParam } from './middleware/common.middleware';
+import { env } from 'hono/adapter';
 
 //#endregion Service imports
 
