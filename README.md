@@ -99,6 +99,16 @@ Use `bun dev` to start the backend development server.
 bun dev
 ```
 
+### Running Tests
+
+The project currently has integration tests located in the `server/test` directory. To run the tests, use the following command:
+
+```sh
+bun run test
+```
+
+> Note: If you cancel tests before they are done cleaning up, subsequent tests may fail due to the db being in a corrupted state. In that case, please manually delete the test records in the db (ideally in future we'd have a separate db for tests that we could empty before tests run).
+
 ---
 
 ## Setting up the Frontend
