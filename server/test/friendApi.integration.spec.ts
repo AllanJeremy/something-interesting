@@ -214,8 +214,6 @@ describe('Friend API', () => {
 					);
 
 					idsOfFriendshipsCreated = friendshipsCreated.map((friendship) => friendship.id);
-
-					console.log('friendships created: ', idsOfFriendshipsCreated);
 				});
 
 				afterEach(async () => {

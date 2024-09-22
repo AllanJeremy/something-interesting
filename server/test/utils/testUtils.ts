@@ -56,17 +56,4 @@ export function getUsers(urlSuffix = '') {
 	return testApiFetch(url, { method: 'GET' });
 }
 
-export async function clearAllUsers() {
-	// Assumption
-	const response = await getUsers('?limit=5000');
-
-	if (response.status === 200) {
-		const responseBody = (await response.json()) as any;
-		const users = responseBody.data;
-		const usersToClear = users.map((user: any) => user.id);
-		const clearUserPromises = usersToClear.map(deleteUser);
-		await Promise.all(clearUserPromises);
-	}
-}
-
 //#endregion User functions
