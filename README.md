@@ -180,8 +180,15 @@ With great power, comes some compromise, or whatever Uncle Ben from spiderman sa
 
 Anyway, here are some assumptions I made while creating these APIs:
 
-1. The database should be able to handle 10M users (100K concurrent)
+1. The database should be able to handle 2M users (100K concurrent)
 2. Reads are more frequent than writes - we make additional queries when adding new friends to cache the number of friends/pending friend requests a user has
+3. The developer is okay with having the local database cleared out by tests (at least until we setup a different database for testing)
+4. The production database is not the same as the development database
+5. The project is not migrating from cloudflare workers
+   - Our tests are built to work with cloudflare workers and would need the initialization to change if we switched service providers
+6. Deleting friends is irreversible. To become friends again you have to send a new request, and previous deleted requests are not stored.
+
+I probably missed something here, but these come top of mind.
 
 ---
 
