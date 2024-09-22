@@ -3,11 +3,6 @@ import { deleteUser, createUser, createMultipleFakeUsers, getUsers, clearAllUser
 
 //#region Tests
 describe('User API', () => {
-	beforeAll(async () => {
-		// This guarantees that we won't have any conflicts and reduces odds of tests failing due to forgetting to do proper cleanup
-		await clearAllUsers();
-	});
-
 	describe('User functionality', () => {
 		describe('Create user', () => {
 			let idsOfUsersCreated: string[] = [];

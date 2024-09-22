@@ -12,11 +12,18 @@ export function createUser(createUserData: any) {
 	});
 }
 
-export async function createMultipleFakeUsers(numOfUsersToCreate: number): Promise<string[]> {
-	let usersToCreate = [];
+/**
+ * Creates multiple fake users for testing purposes.
+ *
+ * @param {number} numOfUsersToCreate - The number of users to create.
+ * @param {string} [prefix='foo'] - The prefix to use for usernames and emails. This helps avoid name collisions when running tests in parallel.
+ * @returns {Promise<string[]>} - A promise that resolves to an array of created user IDs.
+ */
+export async function createMultipleFakeUsers(numOfUsersToCreate: number, prefix = 'foo'): Promise<string[]> {
+	const usersToCreate = [];
 
 	for (let i = 1; i <= numOfUsersToCreate; i++) {
-		const userToCreate = { username: `testuser${i}`, email: `test${i}@foo.com` };
+		const userToCreate = { username: `test.${prefix}.user${i}`, email: `test${i}@${prefix}.com` };
 		usersToCreate.push(userToCreate);
 	}
 
@@ -26,15 +33,11 @@ export async function createMultipleFakeUsers(numOfUsersToCreate: number): Promi
 	const usersCreated = await Promise.all(
 		usersCreatedResponses.map(async (response) => {
 			const json = (await response.json()) as any;
-
-			console.log('user created: ', json);
 			return json.data;
 		})
 	);
 
 	assert(usersCreated.filter(Boolean).length === numOfUsersToCreate, 'Not all users were created! Try again');
-
-	console.log('fake users:', usersCreated);
 
 	const idsOfUsersCreated = usersCreated.map((user) => user.id);
 

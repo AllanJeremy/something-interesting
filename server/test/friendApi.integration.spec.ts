@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { testApiFetch } from './utils/api';
-import { createMultipleFakeUsers, deleteUser } from './utils/testUtils';
+import { clearAllUsers, createMultipleFakeUsers, deleteUser } from './utils/testUtils';
 
 //#region Helper functions
 async function addFriend(userId: string, friendUserId: any) {
@@ -31,14 +31,14 @@ describe('Friend API', () => {
 	let idsOfUsersCreated: string[] = [];
 
 	// Create the users we will simulate friendships between
-	beforeAll(async () => {
-		idsOfUsersCreated = await createMultipleFakeUsers(3);
+	beforeEach(async () => {
+		idsOfUsersCreated = await createMultipleFakeUsers(3, 'bar');
 
 		userId = idsOfUsersCreated[0];
 		friendUserId = idsOfUsersCreated[1];
 	});
 
-	afterAll(async () => {
+	afterEach(async () => {
 		// Delete all users created for these tests
 		await Promise.all(idsOfUsersCreated.map(deleteUser));
 	});
