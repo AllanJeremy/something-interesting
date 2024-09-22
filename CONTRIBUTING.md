@@ -4,7 +4,45 @@
 
 ## Welcome
 
-Glad you're interested in contributing. This document should help you get up to speed
+Glad you're interested in contributing. This document should help you get up to speed. This document is a work in progress.
+
+## Folder structure
+
+```
+.
+├── client/          # Contains the ReactJS frontend code
+│   ├── public/      # Public assets like images and icons
+│   ├── src/         # Source code for the frontend application
+│   │   ├── assets/  # Static assets like images and fonts
+│   │   ├── components/  # Reusable React components
+│   │   ├── hooks/   # Custom React hooks
+│   │   ├── pages/   # Page components for different routes
+│   │   ├── styles/  # Global and component-specific styles
+│   │   ├── utils/   # Utility functions and helpers
+│   │   ├── App.tsx  # Main application component
+│   │   ├── index.tsx  # Entry point for the React application
+│   │   └── ...      # Other source files
+│   ├── .gitignore   # Git ignore file for the client
+│   ├── package.json # NPM package configuration for the client
+│   └── ...          # Other configuration files
+├── server/          # Contains the backend code
+│   ├── src/         # Source code for the backend application
+│   │   ├── db/      # Database migrations and seed files
+│   │   ├── routes/  # API route handlers
+│   │   ├── utils/   # Utility functions and helpers
+│   │   ├── index.ts # Entry point for the backend application
+│   │   └── ...      # Other source files
+│   ├── .gitignore   # Git ignore file for the server
+│   ├── package.json # NPM package configuration for the server
+│   └── ...          # Other configuration files
+├── .github/         # GitHub-specific files like workflows
+│   ├── workflows/   # GitHub Actions workflows for CI/CD
+│   └── ...          # Other GitHub-specific files
+├── .gitignore       # Git ignore file for the entire project
+├── CONTRIBUTING.md  # Guidelines for contributing to the project
+├── README.md        # Project overview and setup instructions
+└── ...              # Other project files
+```
 
 ## Friend Request System: Initiator and Receiver
 
