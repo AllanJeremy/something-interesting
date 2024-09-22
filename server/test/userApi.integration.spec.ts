@@ -2,7 +2,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from
 import { deleteUser, createUser, createMultipleFakeUsers, getUsers } from './utils/testUtils';
 
 //#region Tests
-describe.skip('User API', () => {
+describe.only('User API', () => {
 	describe('User functionality', () => {
 		describe('Create user', () => {
 			let idsOfUsersCreated: string[] = [];
@@ -171,23 +171,29 @@ describe.skip('User API', () => {
 			});
 
 			it('should return the correct page of users when pagination is specified', async () => {
+				// We first fetch without a limit so we know where the record will be cut off (since we can't predict order of insertions)
+				const responseBeforeLimit = await getUsers();
+				const responseBodyBeforeLimit = (await responseBeforeLimit.json()) as any;
+
 				// Running this test with limit of 1 because at the moment we are not guaranteed of order of creation for all records, which makes this trickier to test
 				const limit = 1;
 				const page = 2;
 
 				// specify limit to control returned records (so we know what data to expect from page)
-				const response = await getUsers(`?limit=${limit}&page=${page}`);
-				expect(response.status).toBe(200);
+				const responseAfterLimit = await getUsers(`?limit=${limit}&page=${page}`);
+				expect(responseAfterLimit.status).toBe(200);
 
-				const responseBody = (await response.json()) as any;
-				const actualFirstRecord = responseBody.data[0];
-				const expectedFirstRecordId = idsOfUsersCreated[limit];
+				const responseBodyAfterLimit = (await responseAfterLimit.json()) as any;
+				const actualFirstRecord = responseBodyAfterLimit.data[0];
+
+				const expectedRecordIndex = page * limit - 1; // -1 because we start at 0
+				const expectedFirstRecordId = responseBodyBeforeLimit.data[expectedRecordIndex].id;
 
 				expect(actualFirstRecord.id).toBe(expectedFirstRecordId);
 			});
 
 			it('should return an empty array when pagination is out of bounds', async () => {
-				const page = 200;
+				const page = 5000;
 
 				// specify limit to control returned records (so we know what data to expect from page)
 				const response = await getUsers(`?page=${page}`);
