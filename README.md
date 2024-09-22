@@ -232,4 +232,8 @@ Based on how we have structured the project, here are a few potential areas of i
 14. Figure out how to run integration tests in staging rather than production (setup staging deployment)
 
 15. **Run tests in CI** - Currently tests can only run locally as they have been configured to work in cloudflare worker environments (which GitHub actions is not). This means that in GitHub actions, we don't have access to the same environment variables we have access to locally.
+
     - **Create a testing db** - This db would be specifically dedicated to running tests (potentially host a staging environment and use that for running tests).
+
+16. **Add tests for friendCount and pendingFriendCount being incremented/decremented appropriately** in integration tests.
+    - We use these fields to cache the friend and pending friend count of users

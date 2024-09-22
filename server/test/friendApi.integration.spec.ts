@@ -16,8 +16,8 @@ async function removeFriend(userId: string, friendshipId: string) {
 	return testApiFetch(url, { method: 'DELETE' });
 }
 
-async function getUserFriendList(userId: string) {
-	const url = `/users/${userId}/friends`;
+async function getUserFriendList(userId: string, urlSuffix = '') {
+	const url = `/users/${userId}/friends${urlSuffix}`;
 
 	return testApiFetch(url, { method: 'GET' });
 }
@@ -32,14 +32,14 @@ describe('Friend API', () => {
 
 	// Create the users we will simulate friendships between
 	beforeAll(async () => {
-		idsOfUsersCreated = await createMultipleFakeUsers(2);
+		idsOfUsersCreated = await createMultipleFakeUsers(3);
 
 		userId = idsOfUsersCreated[0];
 		friendUserId = idsOfUsersCreated[1];
 	});
 
 	afterAll(async () => {
-		// Delete all users created
+		// Delete all users created for these tests
 		await Promise.all(idsOfUsersCreated.map(deleteUser));
 	});
 
@@ -78,22 +78,22 @@ describe('Friend API', () => {
 
 			it('should fail if user ID is invalid', async () => {
 				const invalidUserId = 'badUserId';
-				const addFriendResponse = await addFriend(invalidUserId, friendUserId);
+				const response = await addFriend(invalidUserId, friendUserId);
 
-				expect(addFriendResponse.status).toBe(400); // Bad request
+				expect(response.status).toBe(400); // Bad request
 			});
 
 			it('should fail if friend user ID is invalid', async () => {
 				const badFriendUserId = 'badFriendUserId';
-				const addFriendResponse = await addFriend(userId, badFriendUserId);
+				const response = await addFriend(userId, badFriendUserId);
 
-				expect(addFriendResponse.status).toBe(400); // Bad request
+				expect(response.status).toBe(400); // Bad request
 			});
 
 			it('should fail if friend user ID is missing', async () => {
-				const addFriendResponse = await addFriend(userId, undefined);
+				const response = await addFriend(userId, undefined);
 
-				expect(addFriendResponse.status).toBe(400); // Bad request
+				expect(response.status).toBe(400); // Bad request
 			});
 
 			it('should fail if users are already friends (or have existing pending request)', async () => {
@@ -112,90 +112,168 @@ describe('Friend API', () => {
 	});
 
 	describe('Remove friend', () => {
+		let friendshipId: string;
+
+		beforeEach(async () => {
+			// Add one friend for the test then remove them -> no need to validate it works, we already did that in other tests
+			const addFriendResponse = await addFriend(userId, friendUserId);
+			friendshipId = ((await addFriendResponse.json()) as any).data.id;
+		});
+
+		afterEach(async () => {
+			// Delete friendship created as a result of any test run
+			if (friendshipId) {
+				await removeFriend(userId, friendshipId);
+			}
+		});
+
 		describe('Valid inputs', () => {
 			it('should allow friendship initiator to remove friend as a friend', async () => {
-				// TODO: Implement test
+				const response = await removeFriend(userId, friendshipId);
+
+				expect(response.status).toBe(200);
 			});
 
 			it('should allow friend to remove friendship initiator as a friend', async () => {
-				// TODO: Implement test
-			});
+				const response = await removeFriend(friendUserId, friendshipId);
 
-			it('should deduct the number of friends a user has', async () => {
-				// TODO: Implement test
-			});
-
-			describe('users are already friends', () => {
-				it('should decrement the friendCount for the current user by 1', () => {
-					// TODO: Implement test
-				});
-
-				// This prevents us from incorrectly modifying the pendingFriendCount
-				it('should maintain the same pendingFriendCount', () => {
-					// TODO: Implement test
-				});
-			});
-
-			describe('friend request is pending', () => {
-				it('should decrement the pendingFriendCount for the current user by 1', () => {
-					// TODO: Implement test
-				});
-
-				// This prevents us from incorrectly modifying the pendingFriendCount
-				it('should maintain the same friendCount', () => {
-					// TODO: Implement test
-				});
+				expect(response.status).toBe(200);
 			});
 		});
 
 		describe('Invalid inputs', () => {
 			it('should fail if user ID is invalid', async () => {
-				// TODO: Implement test
+				const invalidUserId = 'invalidUserId';
+				const response = await removeFriend(invalidUserId, friendshipId);
+
+				expect(response.status).toBe(400); // Bad request
 			});
 
-			it('should fail if friend user ID is invalid', async () => {
-				// TODO: Implement test
+			it('should fail if friendshipId is invalid', async () => {
+				const invalidFriendshipId = 'invalidFriendUserId';
+				const response = await removeFriend(userId, invalidFriendshipId);
+
+				expect(response.status).toBe(400); // Bad request
 			});
 
-			it('should fail if users are not friends', async () => {
-				// TODO: Implement test
+			it('should fail if users are not friends or have no pending request', async () => {
+				const userIdWithNoFriends = idsOfUsersCreated[2];
+				const response = await removeFriend(userIdWithNoFriends, friendshipId);
+
+				expect(response.status).toBe(404); // Not found
 			});
 		});
 	});
 
-	describe('Get user friend list', () => {
+	describe('Get user friend list & pending requests', () => {
 		describe('Valid inputs', () => {
-			it('should return an empty list if user has no friends', async () => {
-				// TODO: Implement test
+			let friendshipId: string;
+
+			afterEach(async () => {
+				// Delete friendship created as a result of any test run
+				if (friendshipId) {
+					await removeFriend(userId, friendshipId);
+				}
 			});
 
-			it('should return an array containing friends if the user has friends', async () => {
-				// TODO: Implement test
+			it('should return an empty array if user has no friends/requests', async () => {
+				const response = await getUserFriendList(userId);
+				expect(response.status).toBe(200);
+
+				const responseBody = (await response.json()) as any;
+				expect(responseBody.data).toHaveLength(0);
 			});
 
-			it("should include the friend's nickname in the user info, if set", async () => {
-				// TODO: Implement test
+			it('should return an array containing friends if the user has friends/requests', async () => {
+				// Add one friend for the test then remove them -> no need to validate it works, we already did that in other tests
+				const addFriendResponse = await addFriend(userId, friendUserId);
+				friendshipId = ((await addFriendResponse.json()) as any).data.id;
+
+				const response = await getUserFriendList(userId);
+				expect(response.status).toBe(200);
+
+				const responseBody = (await response.json()) as any;
+				expect(responseBody.data).toHaveLength(1);
+
+				expect(responseBody.data[0].id).toBe(friendshipId);
 			});
 
 			describe('Pagination', () => {
-				it('should return the correct number of friends when limit is specified', async () => {
-					// TODO: Implement test
+				let idsOfFriendshipsCreated: string[] = [];
+
+				// Create some fake users to allow for pagination tests
+				beforeEach(async () => {
+					// Create 2 friendships, so we can test out pagination
+					const friendshipsCreatedResponses = await Promise.all([addFriend(userId, friendUserId), addFriend(userId, idsOfUsersCreated[2])]);
+
+					const friendshipsCreated = await Promise.all(
+						friendshipsCreatedResponses.map(async (response) => {
+							const json = (await response.json()) as any;
+							return json.data;
+						})
+					);
+
+					idsOfFriendshipsCreated = friendshipsCreated.map((friendship) => friendship.id);
+
+					console.log('friendships created: ', idsOfFriendshipsCreated);
 				});
 
-				it('should return the correct page of friends when pagination is specified', async () => {
-					// TODO: Implement test
+				afterEach(async () => {
+					// Delete all users created
+					await Promise.all(idsOfFriendshipsCreated.map((friendshipId) => removeFriend(userId, friendshipId)));
 				});
 
-				it('should return an empty array when pagination page is out of bounds', () => {
-					// TODO: Implement test
+				it('should return the correct number of friends/requests when limit is specified', async () => {
+					const limit = 1;
+					const response = await getUserFriendList(userId, `?limit=${limit}`);
+					expect(response.status).toBe(200);
+
+					const responseBody = (await response.json()) as any;
+					expect(responseBody.data).toHaveLength(limit);
+				});
+
+				it('should return the correct page of friends/requests when pagination is specified', async () => {
+					// We first fetch without a limit so we know where the record will be cut off (since we can't predict order of insertions)
+					const responseBeforeLimit = await getUserFriendList(userId);
+					const responseBodyBeforeLimit = (await responseBeforeLimit.json()) as any;
+
+					// Running this test with limit of 1 because at the moment we are not guaranteed of order of creation for all records, which makes this trickier to test
+					const limit = 1;
+					const page = 2;
+
+					// specify limit to control returned records (so we know what data to expect from page)
+					const responseAfterLimit = await getUserFriendList(userId, `?limit=${limit}&page=${page}`);
+					expect(responseAfterLimit.status).toBe(200);
+
+					const responseBody = (await responseAfterLimit.json()) as any;
+					const actualFirstRecord = responseBody.data[0];
+
+					const expectedRecordIndex = page * limit - 1; // -1 because we start at 0
+					const expectedFirstRecordId = responseBodyBeforeLimit.data[expectedRecordIndex].id;
+
+					expect(actualFirstRecord.id).toBe(expectedFirstRecordId);
+				});
+
+				it('should return an empty array when pagination page is out of bounds', async () => {
+					const page = 5000;
+
+					// specify limit to control returned records (so we know what data to expect from page)
+					const response = await getUserFriendList(userId, `?page=${page}`);
+					expect(response.status).toBe(200);
+
+					const responseBody = (await response.json()) as any;
+					expect(responseBody.data).toHaveLength(0);
 				});
 			});
 		});
+	});
 
-		describe('Invalid inputs', () => {
-			it('should fail if user ID is invalid', async () => {
-				// TODO: Implement test
-			});
+	describe('Invalid inputs', () => {
+		it('should fail if user ID is invalid', async () => {
+			const invalidUserId = 'invalidUserId';
+
+			const getUserFriendListResponse = await getUserFriendList(invalidUserId);
+			expect(getUserFriendListResponse.status).toBe(400); // Bad request
 		});
 	});
 });
