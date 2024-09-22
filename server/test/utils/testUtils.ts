@@ -1,4 +1,5 @@
 //? Helper functions that may be used in multiple tests
+import { assert } from 'vitest';
 import { testApiFetch } from './api';
 
 //#region User functions
@@ -25,9 +26,15 @@ export async function createMultipleFakeUsers(numOfUsersToCreate: number): Promi
 	const usersCreated = await Promise.all(
 		usersCreatedResponses.map(async (response) => {
 			const json = (await response.json()) as any;
+
+			console.log('user created: ', json);
 			return json.data;
 		})
 	);
+
+	assert(usersCreated.filter(Boolean).length === numOfUsersToCreate, 'Not all users were created! Try again');
+
+	console.log('fake users:', usersCreated);
 
 	const idsOfUsersCreated = usersCreated.map((user) => user.id);
 
