@@ -107,7 +107,7 @@ The project currently has integration tests located in the `server/test` directo
 bun run test
 ```
 
-> Note: If you cancel tests before they are done cleaning up, the db may still have the records created from that test (as they would have been deleted in cleanup)
+> Note: If you cancel tests before they are done cleaning up, the db may still have the records created from that test (as they would have been deleted in cleanup). Alternatively, we can have a "test" role, and only clear records that have that role. Though this would have the additional overhead of having to remember the role each time you made a test request (unless you abstracted all create requests to a function)
 
 ---
 
