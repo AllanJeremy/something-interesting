@@ -23,7 +23,8 @@ export async function createMultipleFakeUsers(numOfUsersToCreate: number, prefix
 	const usersToCreate = [];
 
 	for (let i = 1; i <= numOfUsersToCreate; i++) {
-		const userToCreate = { username: `test.${prefix}.user${i}`, email: `test${i}@${prefix}.com` };
+		const randomNumber = Math.floor(Math.random() * 1000000);
+		const userToCreate = { username: `test${randomNumber}`, email: `test${randomNumber}@${prefix}.com` };
 		usersToCreate.push(userToCreate);
 	}
 

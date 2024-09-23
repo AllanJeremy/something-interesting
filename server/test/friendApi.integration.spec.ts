@@ -1,6 +1,6 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { testApiFetch } from './utils/api';
-import { clearAllUsers, createMultipleFakeUsers, deleteUser } from './utils/testUtils';
+import { createMultipleFakeUsers, deleteUser } from './utils/testUtils';
 
 //#region Helper functions
 async function addFriend(userId: string, friendUserId: any) {

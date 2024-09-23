@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { deleteUser, createUser, createMultipleFakeUsers, getUsers, clearAllUsers } from './utils/testUtils';
+import { deleteUser, createUser, createMultipleFakeUsers, getUsers } from './utils/testUtils';
 
 //#region Tests
 describe('User API', () => {
